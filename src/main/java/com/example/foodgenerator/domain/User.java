@@ -24,6 +24,8 @@ public class User implements UserDetails {
     private String password;
     private String email;
     private Role role;
+    @OneToMany
+    private List<Meal> meals;
 
 
     @Override
