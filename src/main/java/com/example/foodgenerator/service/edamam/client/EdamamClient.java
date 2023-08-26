@@ -3,7 +3,6 @@ package com.example.foodgenerator.service.edamam.client;
 import com.example.foodgenerator.dto.edamamDto.Food;
 import com.example.foodgenerator.dto.edamamDto.Nutrients;
 import com.example.foodgenerator.dto.edamamDto.ParsedRoot;
-import com.example.foodgenerator.edamam.config.*;
 import com.example.foodgenerator.service.edamam.config.EdamamConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
