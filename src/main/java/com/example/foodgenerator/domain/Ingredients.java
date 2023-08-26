@@ -17,7 +17,10 @@ public class Ingredients {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    public Ingredients(String name) {
+    private int weight;
+
+    public Ingredients(String name, int weight) {
         this.name = name;
+        this.weight = weight;
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Service
 public class IngredientsMapper {
     public List<Ingredients> mapToIngredientList(List<IngredientsDto> ingredientsList) {
@@ -14,7 +15,8 @@ public class IngredientsMapper {
 
     public Ingredients mapToIngredient(IngredientsDto ingredientsDto) {
         return new Ingredients(
-                ingredientsDto.getName()
+                ingredientsDto.getName(),
+                ingredientsDto.getWeight()
         );
     }
 }

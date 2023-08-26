@@ -16,10 +16,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     public UserDto getUser(Long id) {
-        return userMapper.mapToUserDto
-                (userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User with given id dosn't exists")));
+        User user  = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User with given id dosn't exists"));
+        return userMapper.mapToUserDto(user);
     }
-
     public void deleteUser(Long id) {
         if(userExists(id)){
             userRepository.deleteById(id);

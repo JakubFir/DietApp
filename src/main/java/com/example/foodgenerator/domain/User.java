@@ -27,7 +27,6 @@ public class User implements UserDetails {
     @OneToMany
     private List<Meal> meals;
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

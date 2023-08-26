@@ -3,6 +3,7 @@ package com.example.foodgenerator.service;
 import com.example.foodgenerator.domain.Ingredients;
 import com.example.foodgenerator.domain.Meal;
 import com.example.foodgenerator.domain.User;
+import com.example.foodgenerator.dto.IngredientsDto;
 import com.example.foodgenerator.dto.MealDto;
 import com.example.foodgenerator.mapper.IngredientsMapper;
 import com.example.foodgenerator.mapper.MealMapper;
@@ -27,6 +28,7 @@ public class MealService {
     public void addMealToUserMealList(MealDto mealDto, Long userId) {
        User userToAddMealTo = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException(" "));
        checkIfIngredientsAreSaved(ingredientsMapper.mapToIngredientList(mealDto.getIngredientsList()));
+
 
        Meal mappedMeal = mealMapper.mapToMeal(mealDto);
        userToAddMealTo.getMeals().add(mappedMeal);
