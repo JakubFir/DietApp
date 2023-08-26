@@ -2,7 +2,7 @@ package com.example.foodgenerator.controller;
 
 import com.example.foodgenerator.dto.MealDto;
 import com.example.foodgenerator.dto.edamamDto.Nutrients;
-import com.example.foodgenerator.edamam.config.client.EdamamClient;
+import com.example.foodgenerator.service.edamam.client.EdamamClient;
 import com.example.foodgenerator.service.MealService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

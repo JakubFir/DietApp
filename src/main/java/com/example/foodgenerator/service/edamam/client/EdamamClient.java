@@ -1,9 +1,10 @@
-package com.example.foodgenerator.edamam.config.client;
+package com.example.foodgenerator.service.edamam.client;
 
 import com.example.foodgenerator.dto.edamamDto.Food;
 import com.example.foodgenerator.dto.edamamDto.Nutrients;
 import com.example.foodgenerator.dto.edamamDto.ParsedRoot;
 import com.example.foodgenerator.edamam.config.*;
+import com.example.foodgenerator.service.edamam.config.EdamamConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +14,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class EdamamClient {
     private final RestTemplate restTemplate;
     private final EdamamConfig edamamConfig;
