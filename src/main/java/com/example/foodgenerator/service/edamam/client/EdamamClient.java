@@ -19,19 +19,18 @@ public class EdamamClient {
     private final RestTemplate restTemplate;
     private final EdamamConfig edamamConfig;
 
-    public Nutrients getEdamamNutrients() {
+    public Nutrients getEdamamNutrients(String product) {
         URI uri = UriComponentsBuilder.fromHttpUrl(edamamConfig.getEdamamUrl())
                 .queryParam("app_id", edamamConfig.getEdamamAppId())
                 .queryParam("app_key", edamamConfig.getEdamamAppKey())
-                .queryParam("ingr", "apple")
+                .queryParam("ingr", product)
                 .build()
                 .encode()
                 .toUri();
-
+        System.out.println(uri);
         try {
             ResponseEntity<ParsedRoot> edamamNutritionsResponseEntity =
                     restTemplate.exchange(uri, HttpMethod.GET, null, ParsedRoot.class);
-
             ParsedRoot parsedRoot = edamamNutritionsResponseEntity.getBody();
             if (parsedRoot != null && parsedRoot.getParsed() != null && !parsedRoot.getParsed().isEmpty()) {
                 Food food = parsedRoot.getParsed().get(0).getFood();

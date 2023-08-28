@@ -17,10 +17,17 @@ public class Ingredients {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private double calories;
+    private double fat;
+    private double protein;
+    private double carbs;
     private int weight;
 
-    public Ingredients(String name, int weight) {
+    public Ingredients(String name, double calories, double fat, double protein, double carbs) {
         this.name = name;
-        this.weight = weight;
+        this.calories = calories;
+        this.fat = fat;
+        this.protein = protein;
+        this.carbs = carbs;
     }
 }

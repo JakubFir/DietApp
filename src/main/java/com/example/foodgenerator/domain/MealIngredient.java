@@ -1,34 +1,34 @@
 package com.example.foodgenerator.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Meal {
+public class MealIngredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String mealName;
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<MealIngredient> ingredients;
+    private String name;
     private double calories;
     private double fat;
     private double protein;
     private double carbs;
+    private int weight;
 
-    public Meal(String mealName, List<MealIngredient> ingredients, double calories, double fat, double protein, double carbs) {
-        this.mealName = mealName;
-        this.ingredients = ingredients;
+    public MealIngredient(String name, double calories, double fat, double protein, double carbs, int weight) {
+        this.name = name;
         this.calories = calories;
         this.fat = fat;
         this.protein = protein;
         this.carbs = carbs;
+        this.weight = weight;
     }
 }

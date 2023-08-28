@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MealMapper {
 
-    private final IngredientsMapper ingredientsMapper;
+    private final MealIngredientMapper mealIngredientMapper;
     public Meal mapToMeal(MealDto mealDto) {
         return new Meal(
                 mealDto.getMealName(),
-                ingredientsMapper.mapToIngredientList(mealDto.getIngredientsList()),
+                mealIngredientMapper.mapToMealIngredientList(mealDto.getIngredientsList()),
                 mealDto.getCalories(),
                 mealDto.getFat(),
                 mealDto.getProtein(),

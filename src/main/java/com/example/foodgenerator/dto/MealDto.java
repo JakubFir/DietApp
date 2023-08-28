@@ -11,9 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 public class MealDto {
     private String mealName;
-    private Long calories;
-    private Long fat;
-    private Long protein;
-    private Long carbs;
+    private double calories;
+    private double fat;
+    private double protein;
+    private double carbs;
     private List<IngredientsDto> ingredientsList;
 }

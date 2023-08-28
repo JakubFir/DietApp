@@ -14,13 +14,10 @@ public class Nutrients {
     @JsonProperty("ENERC_KCAL")
     private double calories;
     @JsonProperty("PROCNT")
-    private double procnmt;
+    private double protein;
     @JsonProperty("FAT")
     private double fat;
     @JsonProperty("CHOCDF")
-    private double chd;
-    @JsonProperty("FIBTG")
-    private double fib;
-
+    private double carbs;
 
 }

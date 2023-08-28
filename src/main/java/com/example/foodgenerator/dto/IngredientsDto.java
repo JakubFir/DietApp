@@ -9,5 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class IngredientsDto {
     private String name;
+    private double calories;
+    private double fat;
+    private double protein;
+    private double carbs;
     private int weight;
 }
