@@ -1,15 +1,13 @@
 package com.example.foodgenerator.service;
 
-import com.example.foodgenerator.domain.Ingredients;
-import com.example.foodgenerator.domain.Meal;
-import com.example.foodgenerator.domain.MealIngredient;
-import com.example.foodgenerator.domain.User;
+import com.example.foodgenerator.domain.*;
 import com.example.foodgenerator.dto.IngredientsDto;
 import com.example.foodgenerator.dto.MealDto;
 import com.example.foodgenerator.dto.edamamDto.Nutrients;
 import com.example.foodgenerator.mapper.MealIngredientMapper;
 import com.example.foodgenerator.mapper.MealMapper;
 import com.example.foodgenerator.repository.IngredientsRepository;
+import com.example.foodgenerator.repository.MealDiaryRepository;
 import com.example.foodgenerator.repository.MealRepository;
 import com.example.foodgenerator.repository.UserRepository;
 import com.example.foodgenerator.service.edamam.client.EdamamClient;
@@ -28,15 +26,24 @@ public class MealService {
     private final EdamamClient edamamClient;
     private final IngredientsRepository ingredientsRepository;
     private final MealIngredientMapper mealIngredientMapper;
+    private final MealDiaryRepository mealDiaryRepository;
     private final MealMapper mealMapper;
 
     public void addMealToUserMealList(MealDto mealDto, Long userId) {
         User userToAddMealTo = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException(" "));
         checkIfIngredientsAreInDB(mealDto.getIngredientsList());
+        MealDiary mealDiary = mealDiaryRepository.findByUserAndDate(userToAddMealTo,mealDto.getMealDate());
         Meal meal = calculateMealCalories(mealDto);
 
-        userToAddMealTo.getMeals().add(meal);
-        System.out.println(meal);
+        if(mealDiary == null){
+            mealDiary = new MealDiary();
+            mealDiary.setUser(userToAddMealTo);
+            mealDiary.setDate(mealDto.getMealDate());
+            mealDiaryRepository.save(mealDiary);
+            userToAddMealTo.getMealDiary().add(mealDiary);
+        }
+        meal.setMealDiary(mealDiary);
+        mealDiary.getMeals().add(meal);
         mealRepository.save(meal);
         userRepository.save(userToAddMealTo);
     }
@@ -52,7 +59,6 @@ public class MealService {
                         nutrients.getProtein(),
                         nutrients.getCarbs()
                 );
-                System.out.println(ingredientToSave);
                 ingredientsRepository.save(ingredientToSave);
             }
         }
@@ -94,7 +100,7 @@ public class MealService {
         return meal;
     }
 
-    public List<Meal> getUserMeals(Long userId) {
-        return userRepository.findById(userId).orElseThrow().getMeals();
+    public List<MealDiary> getUserMeals(Long userId) {
+        return userRepository.findById(userId).orElseThrow().getMealDiary();
     }
 }

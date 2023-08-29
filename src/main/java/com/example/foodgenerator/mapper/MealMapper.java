@@ -5,6 +5,9 @@ import com.example.foodgenerator.dto.MealDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class MealMapper {
@@ -19,5 +22,16 @@ public class MealMapper {
                 mealDto.getProtein(),
                 mealDto.getCarbs()
         );
+    }
+
+    public MealDto mapToMealDto(Meal meal) {
+        return new MealDto(
+                meal.getMealName(),
+                meal.getCalories(),
+                meal.getFat(),
+                meal.getProtein(),
+                meal.getCarbs(),
+                meal.getMealDiary().getDate(),
+                meal.getIngredients().stream().map(mealIngredientMapper::mapToMealIngredientDto).collect(Collectors.toList()));
     }
 }

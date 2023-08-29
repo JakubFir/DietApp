@@ -25,7 +25,7 @@ public class User implements UserDetails {
     private String email;
     private Role role;
     @OneToMany
-    private List<Meal> meals;
+    private List<MealDiary> mealDiary;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

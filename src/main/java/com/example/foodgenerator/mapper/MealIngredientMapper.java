@@ -23,4 +23,15 @@ public class MealIngredientMapper {
                ingredientsDto.getWeight()
         );
     }
+
+    public IngredientsDto mapToMealIngredientDto(MealIngredient mealIngredient) {
+        return new IngredientsDto(
+                mealIngredient.getName(),
+                mealIngredient.getCalories(),
+                mealIngredient.getFat(),
+                mealIngredient.getProtein(),
+                mealIngredient.getCarbs(),
+                mealIngredient.getWeight()
+        );
+    }
 }

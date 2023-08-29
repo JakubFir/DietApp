@@ -1,6 +1,7 @@
 package com.example.foodgenerator.controller;
 
 import com.example.foodgenerator.domain.Meal;
+import com.example.foodgenerator.domain.MealDiary;
 import com.example.foodgenerator.dto.MealDto;
 import com.example.foodgenerator.service.MealService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class MealController {
         mealService.addMealToUserMealList(mealDto, userId);
     }
     @GetMapping(path = "/{userId}")
-    public List<Meal> getUserMeals(@PathVariable Long userId){
+    public List<MealDiary> getUserMeals(@PathVariable Long userId){
        return mealService.getUserMeals(userId);
     }
 

@@ -22,6 +22,9 @@ public class Meal {
     private double fat;
     private double protein;
     private double carbs;
+    @ManyToOne
+    @JoinColumn(name = "meal_diary_id")
+    private MealDiary mealDiary;
 
     public Meal(String mealName, List<MealIngredient> ingredients, double calories, double fat, double protein, double carbs) {
         this.mealName = mealName;

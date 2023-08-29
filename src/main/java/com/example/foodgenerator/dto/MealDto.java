@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 @Data
 @AllArgsConstructor
@@ -15,5 +16,6 @@ public class MealDto {
     private double fat;
     private double protein;
     private double carbs;
+    private LocalDate mealDate;
     private List<IngredientsDto> ingredientsList;
 }
