@@ -1,5 +1,6 @@
 package com.example.foodgenerator.service;
 
+import com.example.foodgenerator.domain.Gender;
 import com.example.foodgenerator.domain.Role;
 import com.example.foodgenerator.domain.User;
 import com.example.foodgenerator.dto.UserDto;
@@ -37,8 +38,32 @@ class UserServiceTest {
     @Test
     void getUser() {
         //Given
-        User user = new User(1L,"Adam","qwerty","test@Wp.pl", Role.USER,new ArrayList<>());
-        UserDto userDto = new UserDto("Adam","test@Wp.pl",Role.USER,new ArrayList<>());
+        User user = new User(
+                1L,
+                "Adam",
+                "qwerty",
+                "test@Wp.pl",
+                30,
+                70.5,
+                175.0,
+                Gender.MALE,
+                3,
+                Role.USER,
+                0.0,
+                new ArrayList<>()
+        );
+        UserDto userDto = new UserDto(
+                "Adam",
+                "test@Wp.pl",
+                Role.USER,
+                30,
+                70.5,
+                175.0,
+                Gender.MALE,
+                3,
+                0.0,
+                new ArrayList<>()
+        );
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(userMapper.mapToUserDto(any(User.class))).thenReturn(userDto);
 

@@ -23,7 +23,13 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private String email;
+    private int age;
+    private double weight;
+    private double height;
+    private Gender gender;
+    private int activityLevel;
     private Role role;
+    private double caloricDemand;
     @OneToMany
     private List<MealDiary> mealDiary;
 

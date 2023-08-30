@@ -14,6 +14,7 @@ public class RegisterService {
     private final UserRepository userRepository;
     private final RequestValidator requestValidator;
     private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
     public void registerUser(RegisterRequest request) {
         if(requestValidator.validateRegisterRequest(request)){
             User user = new User();
@@ -21,6 +22,12 @@ public class RegisterService {
                 user.setUsername(request.getUsername());
                 user.setPassword(passwordEncoder.encode(request.getPassword()));
                 user.setRole(Role.USER);
+                user.setAge(request.getAge());
+                user.setGender(request.getGender());
+                user.setHeight(request.getHeight());
+                user.setWeight(request.getWeight());
+                user.setActivityLevel(request.getActivityLevel());
+                user.setCaloricDemand(userService.calculateCaloricDemand(request));
                 userRepository.save(user);
         }
 

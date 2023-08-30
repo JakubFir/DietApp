@@ -18,6 +18,12 @@ public class UserMapper {
                 .email(user.getEmail())
                 .role(user.getRole())
                 .username(user.getUsername())
+                .age(user.getAge())
+                .gender(user.getGender())
+                .height(user.getHeight())
+                .weight(user.getWeight())
+                .activityLevel(user.getActivityLevel())
+                .caloricDemand(user.getCaloricDemand())
                 .mealDiary(user.getMealDiary().stream().map(mealDiaryMapper::mapToMealDiaryDTO).collect(Collectors.toList()))
                 .build();
     }
