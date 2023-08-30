@@ -1,6 +1,5 @@
 package com.example.foodgenerator.controller;
 
-import com.example.foodgenerator.domain.Meal;
 import com.example.foodgenerator.domain.MealDiary;
 import com.example.foodgenerator.dto.MealDto;
 import com.example.foodgenerator.service.MealService;
@@ -17,7 +16,7 @@ public class MealController {
     private final MealService mealService;
     @PostMapping(path = "/{userId}")
     public void addMealToUserMealList(@RequestBody MealDto mealDto, @PathVariable Long userId) {
-        mealService.addMealToUserMealList(mealDto, userId);
+        mealService.addMealToUserMealDiary(mealDto, userId);
     }
     @GetMapping(path = "/{userId}")
     public List<MealDiary> getUserMeals(@PathVariable Long userId){

@@ -29,12 +29,20 @@ public class MealService {
     private final MealDiaryRepository mealDiaryRepository;
     private final MealMapper mealMapper;
 
-    public void addMealToUserMealList(MealDto mealDto, Long userId) {
+    public void addMealToUserMealDiary(MealDto mealDto, Long userId) {
         User userToAddMealTo = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException(" "));
         checkIfIngredientsAreInDB(mealDto.getIngredientsList());
-        MealDiary mealDiary = mealDiaryRepository.findByUserAndDate(userToAddMealTo,mealDto.getMealDate());
-        Meal meal = calculateMealCalories(mealDto);
+        MealDiary mealDiary = getUserMealDiary(userToAddMealTo,mealDto);
 
+        Meal meal = calculateMealCalories(mealDto);
+        meal.setMealDiary(mealDiary);
+        mealDiary.getMeals().add(meal);
+        mealRepository.save(meal);
+        userRepository.save(userToAddMealTo);
+    }
+
+    private MealDiary getUserMealDiary(User userToAddMealTo, MealDto mealDto) {
+        MealDiary mealDiary = mealDiaryRepository.findByUserAndDate(userToAddMealTo,mealDto.getMealDate());
         if(mealDiary == null){
             mealDiary = new MealDiary();
             mealDiary.setUser(userToAddMealTo);
@@ -42,10 +50,7 @@ public class MealService {
             mealDiaryRepository.save(mealDiary);
             userToAddMealTo.getMealDiary().add(mealDiary);
         }
-        meal.setMealDiary(mealDiary);
-        mealDiary.getMeals().add(meal);
-        mealRepository.save(meal);
-        userRepository.save(userToAddMealTo);
+        return mealDiary;
     }
 
     private void checkIfIngredientsAreInDB(List<IngredientsDto> ingredientsList) {

@@ -18,7 +18,7 @@ public class UserMapper {
                 .email(user.getEmail())
                 .role(user.getRole())
                 .username(user.getUsername())
-                .mealDiaryDtos(user.getMealDiary().stream().map(mealDiaryMapper::mapToMealDiaryDTO).collect(Collectors.toList()))
+                .mealDiary(user.getMealDiary().stream().map(mealDiaryMapper::mapToMealDiaryDTO).collect(Collectors.toList()))
                 .build();
     }
 }
