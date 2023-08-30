@@ -4,6 +4,7 @@ import com.example.foodgenerator.dto.MealDiaryDto;
 import com.example.foodgenerator.mapper.MealDiaryMapper;
 import com.example.foodgenerator.repository.MealDiaryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,7 @@ public class MealDiaryController {
     private final MealDiaryMapper mealDiaryMapper;
 
     @GetMapping()
-    public List<MealDiaryDto> mealDiaryDTO(){
-        return mealDiaryMapper.mapToListMealDiaryDTO(mealDiaryRepository.findAll());
+    public ResponseEntity<List<MealDiaryDto>> mealDiaryDTO(){
+        return ResponseEntity.ok(mealDiaryMapper.mapToListMealDiaryDTO(mealDiaryRepository.findAll()));
     }
 }

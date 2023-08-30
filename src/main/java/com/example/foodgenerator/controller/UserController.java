@@ -5,6 +5,7 @@ import com.example.foodgenerator.dto.UserDto;
 
 import com.example.foodgenerator.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,15 +16,16 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping(path = "/{id}")
-    public UserDto getUser(@PathVariable Long id){
-        return userService.getUser(id);
+    public ResponseEntity<UserDto> getUser(@PathVariable Long id){
+        return ResponseEntity.ok(userService.getUser(id));
     }
     @DeleteMapping(path = "/{id}")
-    public void deleteUser(@PathVariable Long id){
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
         userService.deleteUser(id);
+        return ResponseEntity.ok().build();
     }
     @PutMapping(path = "/{id}")
-    public UserDto updateUser(@PathVariable Long id, @RequestBody RequestUpdateBody request){
-        return userService.updateUser(id, request);
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody RequestUpdateBody request){
+        return ResponseEntity.ok(userService.updateUser(id, request));
     }
 }

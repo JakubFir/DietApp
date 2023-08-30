@@ -3,6 +3,8 @@ package com.example.foodgenerator.controller;
 import com.example.foodgenerator.domain.Ingredients;
 import com.example.foodgenerator.service.IngredientsService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +20,7 @@ public class IngredientsController {
 
 
     @GetMapping()
-    public List<Ingredients> getIngredients(){
-        return ingredientsService.getAll();
+    public ResponseEntity<List<Ingredients>> getIngredients(){
+        return ResponseEntity.ok(ingredientsService.getAll());
     }
 }
