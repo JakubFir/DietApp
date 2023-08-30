@@ -33,10 +33,10 @@ public class MealService {
         User userToAddMealTo = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException(" "));
         checkIfIngredientsAreInDB(mealDto.getIngredientsList());
         MealDiary mealDiary = getUserMealDiary(userToAddMealTo,mealDto);
-
         Meal meal = calculateMealCalories(mealDto);
         meal.setMealDiary(mealDiary);
         mealDiary.getMeals().add(meal);
+        mealDiary.setCaloricDemandForGivenDay(mealDiary.getCaloricDemandForGivenDay() - meal.getCalories());
         mealRepository.save(meal);
         userRepository.save(userToAddMealTo);
     }
@@ -47,6 +47,7 @@ public class MealService {
             mealDiary = new MealDiary();
             mealDiary.setUser(userToAddMealTo);
             mealDiary.setDate(mealDto.getMealDate());
+            mealDiary.setCaloricDemandForGivenDay(userToAddMealTo.getCaloricDemand());
             mealDiaryRepository.save(mealDiary);
             userToAddMealTo.getMealDiary().add(mealDiary);
         }

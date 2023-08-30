@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class MealDiaryDto {
     private String username;
+    private double caloricDemandForGivenDay;
     private LocalDate date;
     private List<MealDto> list;
 }

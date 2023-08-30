@@ -17,6 +17,7 @@ public class MealDiaryMapper {
     public MealDiaryDto mapToMealDiaryDTO(MealDiary mealDiary){
         return new MealDiaryDto(
                 mealDiary.getUser().getUsername(),
+                mealDiary.getCaloricDemandForGivenDay(),
                 mealDiary.getDate(),
                 mealDiary.getMeals().stream().map(mealMapper::mapToMealDto).collect(Collectors.toList()));
     }
