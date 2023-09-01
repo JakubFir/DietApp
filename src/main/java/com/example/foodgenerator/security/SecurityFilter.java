@@ -25,12 +25,7 @@ public class SecurityFilter {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/v1/register")
-                                .permitAll())
-                .authorizeHttpRequests(auth ->
-                        auth
-                                .anyRequest()
-                                .authenticated())
+                        auth.anyRequest().permitAll())
                 .sessionManagement(
                         httpSecuritySessionManagementConfigurer ->
                                 httpSecuritySessionManagementConfigurer

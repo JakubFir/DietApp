@@ -1,4 +1,4 @@
-package com.example.foodgenerator.webConfig;
+package com.example.foodgenerator.config.webConfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
