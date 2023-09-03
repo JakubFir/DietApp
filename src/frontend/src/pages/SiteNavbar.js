@@ -31,6 +31,11 @@ export function SiteNavbar() {
                                         Profile
                                     </Button>
                                 </Link>
+                                <Link to="/meals">
+                                    <Button Button type="primary" shape="round">
+                                        Meals
+                                    </Button>
+                                </Link>
                                 <Button type="primary" shape="round" onClick={handleLogout}>
                                     Logout
                                 </Button>

@@ -42,15 +42,14 @@ public class MealService {
     }
 
     private MealDiary getUserMealDiary(User userToAddMealTo, MealDto mealDto) {
-        MealDiary mealDiary = mealDiaryRepository.findByUserAndDate(userToAddMealTo,mealDto.getMealDate());
-        if(mealDiary == null){
-            mealDiary = new MealDiary();
-            mealDiary.setUser(userToAddMealTo);
-            mealDiary.setDate(mealDto.getMealDate());
-            mealDiary.setCaloricDemandForGivenDay(userToAddMealTo.getCaloricDemand());
-            mealDiaryRepository.save(mealDiary);
-            userToAddMealTo.getMealDiary().add(mealDiary);
-        }
+        MealDiary mealDiary = mealDiaryRepository.findByIdAndDate(userToAddMealTo.getUserId(),mealDto.getMealDate()).orElse(new MealDiary());
+            if(mealDiary.getUser() == null) {
+                mealDiary.setUser(userToAddMealTo);
+                mealDiary.setDate(mealDto.getMealDate());
+                mealDiary.setCaloricDemandForGivenDay(userToAddMealTo.getCaloricDemand());
+                mealDiaryRepository.save(mealDiary);
+                userToAddMealTo.getMealDiary().add(mealDiary);
+            }
         return mealDiary;
     }
 

@@ -1,10 +1,8 @@
+import UserProfileDescriptions from "../Components/UserProfileDescriptions";
 
-const ProfilePage = () => {
-
-    return (
-        <h1>
-            hello
-        </h1>
-    )
-}
+const ProfilePage = () =>(
+    <div>
+        <UserProfileDescriptions />
+    </div>
+)
 export default ProfilePage;

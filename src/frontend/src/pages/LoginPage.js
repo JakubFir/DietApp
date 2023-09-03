@@ -28,7 +28,7 @@ const LoginPage = () => {
             .then(response => response.json())
             .then(data => {
                 localStorage.setItem('jwt', data.token);
-                close(true);
+                console.log(data.token)
                 navigate("/profile")
             }).catch(error => {
                 console.log(error)

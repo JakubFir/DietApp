@@ -24,6 +24,25 @@
   color: white;
 }
 
+/* Add this CSS to your stylesheet or in a style block */
+.date-container {
+  background-color: white; /* You can change the background color */
+  color: white; /* Text color */
+  border-radius: 8px; /* Adjust this value to change the border radius */
+  padding: 10px; /* Adjust padding as needed */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px; /* Adjust the width to make it square */
+  text-align: center;
+}
+
+
+.user-profile-descriptions {
+  flex: 1; /* Allow the div to expand and fill the remaining vertical space */
+  padding: 20px; /* Add padding as needed */
+  background-color: white; /* Add a background color for visualization */
+}
 .App-link {
   color: #61dafb;
 }
