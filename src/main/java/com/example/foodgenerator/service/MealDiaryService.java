@@ -17,7 +17,9 @@ public class MealDiaryService {
     public MealDiary getUserMealDiary(Long userId, LocalDate date) {
         User user = userRepository.findById(userId).orElseThrow();
         MealDiary mealDiary = mealDiaryRepository.findByUserAndDate(user,date).orElse(new MealDiary());
-        mealDiary.setCaloricDemandForGivenDay(user.getCaloricDemand());
+        if(mealDiary.getCaloricDemandForGivenDay() == 0){
+            mealDiary.setCaloricDemandForGivenDay(user.getCaloricDemand());
+        }
         mealDiary.setUser(user);
         mealDiary.setDate(date);
         return mealDiary;
