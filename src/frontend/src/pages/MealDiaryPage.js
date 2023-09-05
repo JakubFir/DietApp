@@ -33,10 +33,10 @@ const MealDiaryPage = () => {
         const jwtToken = localStorage.getItem("jwt");
         const decodedToken = JSON.parse(atob(jwtToken.split('.')[1]));
         const formattedDate = formatDateToAPIFormat(date);
-
         getUserMealDiary(decodedToken.UserId, formattedDate)
             .then(res => res.json())
             .then(data => {
+                console.log(data)
                 setMeals(data);
             });
     };
