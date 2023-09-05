@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Typography, Card, Space } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Button, Typography, Card, Space, Progress, Tooltip } from 'antd';
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import { getUserMealDiary } from "../clients/MealDiaryClient";
 import AddMealDraver from "../drawers/AddMealDraver";
@@ -7,26 +7,19 @@ import AddMealDraver from "../drawers/AddMealDraver";
 const MealDiaryPage = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [meals, setMeals] = useState([]);
-    const [showDrawer, setShowDrawer] = useState(false)
+    const [showDrawer, setShowDrawer] = useState(false);
+    const [caloricDemandProgress, setCaloricDemandProgress] = useState(0);
 
-    const close = async () => {
+    const close = () => {
         setShowDrawer(false);
-        await fetchMeals(selectedDate);
     };
 
     const handleAddMeal = () => {
         setShowDrawer(true);
-    }
-    const handleDateChange = (date) => {
-        setSelectedDate(date);
-        fetchMeals(date);
     };
 
-    const formatDateToAPIFormat = (date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
+    const handleDateChange = (date) => {
+        setSelectedDate(date);
     };
 
     const fetchMeals = (date) => {
@@ -36,16 +29,59 @@ const MealDiaryPage = () => {
         getUserMealDiary(decodedToken.UserId, formattedDate)
             .then(res => res.json())
             .then(data => {
-                console.log(data)
                 setMeals(data);
             });
     };
 
+    const calculateCaloricDemandProgress = () => {
+        if (meals.list && typeof meals.caloricDemandForGivenDay === 'number') {
+            const consumedCalories = meals.list.reduce((total, meal) => total + meal.calories, 0);
+            let maxCalories = consumedCalories + meals.caloricDemandForGivenDay;
+            let progress = (consumedCalories / maxCalories) * 100;
+            progress = Math.max(progress, 0);
+            setCaloricDemandProgress(Math.round(progress));
+        }
+    };
+
+    useEffect(() => {
+        fetchMeals(selectedDate);
+    }, [selectedDate]);
+
+    useEffect(() => {
+        calculateCaloricDemandProgress();
+    }, [meals]);
+
+    const formatDateToAPIFormat = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    const calculateTotalSum = () => {
+        if (Array.isArray(meals.list)) {
+            const totalSum = meals.list.reduce((acc, meal) => {
+                acc.calories += meal.calories || 0;
+                acc.fat += meal.fat || 0;
+                acc.protein += meal.protein || 0;
+                acc.carbs += meal.carbs || 0;
+                return acc;
+            }, { calories: 0, fat: 0, protein: 0, carbs: 0 });
+
+            return totalSum;
+        }
+        return { calories: 0, fat: 0, protein: 0, carbs: 0 };
+    };
+
+    const totalSum = calculateTotalSum();
+
     const renderContent = () => {
         if (!Array.isArray(meals.list)) {
-            return <div style={{ marginBottom: '10vh', display: 'flex', justifyContent: 'center' }}>
-                <Button type="primary" >Add Meal</Button>
-            </div>
+            return (
+                <div style={{ marginBottom: '10vh', display: 'flex', justifyContent: 'center' }}>
+                    <Button type="primary" onClick={handleAddMeal}>Add Meal</Button>
+                </div>
+            );
         }
         return (
             <>
@@ -54,57 +90,77 @@ const MealDiaryPage = () => {
                     close={close}
                     selectedDate={selectedDate}
                 />
-            <div>
-                <div style={{ marginBottom: '10vh', display: 'flex', justifyContent: 'center' }}>
-                    <Button type="primary" onClick={() => handleAddMeal()}>Add Meal </Button>
-                </div>
-                <Space direction="horizontal">
-                    {meals.list.map((meal, index) => (
-                        <Card key={index} title={meal.mealName} style={{
-                            width: '100%',
+                <div>
+                    <div style={{ marginBottom: '5vh', display: 'flex', justifyContent: 'center' }}>
+                        <Button type="primary" onClick={handleAddMeal}>Add Meal</Button>
+                    </div>
+
+                    <Space direction="horizontal">
+                        {meals.list.map((meal, index) => (
+                            <Card key={index} title={meal.mealName} style={{
+                                width: '100%',
+                                backgroundColor: 'lightgray',
+                                height: '400px',
+                                overflowY: 'auto',
+                            }}>
+                                <p>Calories: {Math.round(meal.calories)}</p>
+                                <p>Fat: {Math.round(meal.fat)}</p>
+                                <p>Protein: {Math.round(meal.protein)}</p>
+                                <p>Carbs: {Math.round(meal.carbs)}</p>
+                                <ul>
+                                    {meal.ingredientsList.map((ingredient, ingredientIndex) => (
+                                        <li key={ingredientIndex}>
+                                            {ingredient.name} - Calories: {ingredient.calories}
+                                        </li>
+                                    ))}
+                                </ul>
+                                <Button type={"primary"}>
+                                    Edit meal
+                                </Button>
+                            </Card>
+                        ))}
+                        <Card title="Total Sum" style={{
+                            width: '100',
                             backgroundColor: 'lightgray',
                             height: '400px',
-                            overflowY: 'auto',
                         }}>
-                            <p>Calories: {meal.calories}</p>
-                            <p>Fat: {meal.fat}</p>
-                            <p>Protein: {meal.protein}</p>
-                            <p>Carbs: {meal.carbs}</p>
-                            <ul>
-                                {meal.ingredientsList.map((ingredient, ingredientIndex) => (
-                                    <li key={ingredientIndex}>
-                                        {ingredient.name} - Calories: {ingredient.calories}
-                                    </li>
-                                ))}
-                            </ul>
-                            <Button type={"primary"}>
-                                Edit meal
-                            </Button>
+                            <p>Calories: {Math.round(totalSum.calories)}</p>
+                            <p>Fat: {Math.round(totalSum.fat)}</p>
+                            <p>Protein: {Math.round(totalSum.protein)}</p>
+                            <p>Carbs: {Math.round(totalSum.carbs)}</p>
+                                <Space  >
+                                    <Tooltip title={`${caloricDemandProgress.toFixed(2)}% of daily caloric demand achieved`}>
+                                        <Progress percent={caloricDemandProgress} success={{ percent: caloricDemandProgress }} type="dashboard" />
+                                    </Tooltip>
+                                </Space >
+
                         </Card>
-                    ))}
-                </Space>
-            </div>
+                    </Space>
+                </div>
             </>
         );
     };
 
     return (
-        <div style={{ backgroundColor: 'white', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
-                <Button icon={<ArrowLeftOutlined />} onClick={() => handleDateChange(new Date(selectedDate - 24 * 60 * 60 * 1000))}>
-                    Previous Day
-                </Button>
-                <div className="date-container">
-                    <Typography.Title level={3} style={{ margin: 0 }}>{selectedDate.toDateString()}</Typography.Title>
+        <>
+            <div style={{ backgroundColor: 'white', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+                    <Button icon={<ArrowLeftOutlined />} onClick={() => handleDateChange(new Date(selectedDate - 24 * 60 * 60 * 1000))}>
+                        Previous Day
+                    </Button>
+                    <div className="date-container">
+                        <Typography.Title level={3} style={{ margin: 0 }}>{selectedDate.toDateString()}</Typography.Title>
+                    </div>
+                    <Button icon={<ArrowRightOutlined />} onClick={() => handleDateChange(new Date(selectedDate.getTime() + 24 * 60 * 60 * 1000))}>
+                        Next Day
+                    </Button>
                 </div>
-                <Button icon={<ArrowRightOutlined />} onClick={() => handleDateChange(new Date(selectedDate.getTime() + 24 * 60 * 60 * 1000))}>
-                    Next Day
-                </Button>
+                <div style={{ marginTop: '16px' }}>
+                    {renderContent()}
+                </div>
             </div>
-            <div style={{ marginTop: '16px' }}>
-                {renderContent()}
-            </div>
-        </div>
+        </>
     );
 };
+
 export default MealDiaryPage;
