@@ -3,7 +3,7 @@ import {useState} from "react";
 import {registerUser} from "../clients/RegisterClinet";
 
 
-const RegisterDrawer = ({visible, close}) => {
+const RegisterDrawer = ({ visible, close }) => {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -24,10 +24,9 @@ const RegisterDrawer = ({visible, close}) => {
             gender: gender,
             activityLevel: activityLever
         };
-        console.log(registerBody)
         registerUser(registerBody)
             .then(() => {
-                console.log(registerBody)
+                close();
             }).catch(error => {
                 console.log(error);
         })

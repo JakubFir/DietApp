@@ -24,6 +24,6 @@ export const addMealToUserMealDiary = (userId, meal) =>
         headers: {
             'Content-Type': 'application/json'
         },
-        method: 'GET',
+        method: 'POST',
         body: JSON.stringify(meal)
     }).then(checkStatus);

@@ -10,5 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface MealDiaryRepository extends JpaRepository<MealDiary,Long> {
-    Optional<MealDiary> findByIdAndDate(Long userId, LocalDate mealDate);
+    Optional<MealDiary> findByUserAndDate(User user, LocalDate date);
 }

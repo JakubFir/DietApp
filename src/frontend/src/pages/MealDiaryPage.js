@@ -2,11 +2,21 @@ import React, { useState } from 'react';
 import { Button, Typography, Card, Space } from 'antd';
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import { getUserMealDiary } from "../clients/MealDiaryClient";
+import AddMealDraver from "../drawers/AddMealDraver";
 
 const MealDiaryPage = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [meals, setMeals] = useState([]);
+    const [showDrawer, setShowDrawer] = useState(false)
 
+    const close = async () => {
+        setShowDrawer(false);
+        await fetchMeals(selectedDate);
+    };
+
+    const handleAddMeal = () => {
+        setShowDrawer(true);
+    }
     const handleDateChange = (date) => {
         setSelectedDate(date);
         fetchMeals(date);
@@ -33,17 +43,29 @@ const MealDiaryPage = () => {
 
     const renderContent = () => {
         if (!Array.isArray(meals.list)) {
-            return <p>No meals for this date.</p>;
+            return <div style={{ marginBottom: '10vh', display: 'flex', justifyContent: 'center' }}>
+                <Button type="primary" >Add Meal</Button>
+            </div>
         }
         return (
-
+            <>
+                <AddMealDraver
+                    visible={showDrawer}
+                    close={close}
+                    selectedDate={selectedDate}
+                />
             <div>
                 <div style={{ marginBottom: '10vh', display: 'flex', justifyContent: 'center' }}>
-                    <Button type="primary" >Add Meal</Button>
+                    <Button type="primary" onClick={() => handleAddMeal()}>Add Meal </Button>
                 </div>
                 <Space direction="horizontal">
                     {meals.list.map((meal, index) => (
-                        <Card key={index} title={meal.mealName} style={{ width: '100%', backgroundColor: 'lightgray' }}>
+                        <Card key={index} title={meal.mealName} style={{
+                            width: '100%',
+                            backgroundColor: 'lightgray',
+                            height: '400px',
+                            overflowY: 'auto',
+                        }}>
                             <p>Calories: {meal.calories}</p>
                             <p>Fat: {meal.fat}</p>
                             <p>Protein: {meal.protein}</p>
@@ -62,6 +84,7 @@ const MealDiaryPage = () => {
                     ))}
                 </Space>
             </div>
+            </>
         );
     };
 

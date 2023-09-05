@@ -10,7 +10,6 @@ function UserProfileDescriptions() {
 
     useEffect(() => {
         const jwtToken = localStorage.getItem("jwt");
-        console.log(jwtToken)
         const decodedToken = JSON.parse(atob(jwtToken.split('.')[1]));
         setUserId(decodedToken.UserId);
 
@@ -18,7 +17,6 @@ function UserProfileDescriptions() {
             .then(res => res.json())
             .then(data => {
                 setUserInfo(data)
-                console.log(data)
             })
 
     }, []);
