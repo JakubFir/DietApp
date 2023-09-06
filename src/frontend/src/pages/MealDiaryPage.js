@@ -34,10 +34,8 @@ const MealDiaryPage = () => {
     };
 
     const calculateCaloricDemandProgress = () => {
-        if (meals.list && typeof meals.caloricDemandForGivenDay === 'number') {
-            const consumedCalories = meals.list.reduce((total, meal) => total + meal.calories, 0);
-            let maxCalories = consumedCalories + meals.caloricDemandForGivenDay;
-            let progress = (consumedCalories / maxCalories) * 100;
+        if (meals.list && typeof meals.caloricDemand === 'number') {
+            let progress = ((meals.caloricDemand - meals.remainingCalories)/meals.caloricDemand) * 100;
             progress = Math.max(progress, 0);
             setCaloricDemandProgress(Math.round(progress));
         }

@@ -36,8 +36,8 @@ public class MealService {
         Meal meal = calculateMealCalories(mealDto);
         meal.setMealDiary(mealDiary);
         mealDiary.getMeals().add(meal);
-        mealDiary.setCaloricDemandForGivenDay(mealDiary.getCaloricDemandForGivenDay() - meal.getCalories());
-        System.out.println(mealDiary.getCaloricDemandForGivenDay());
+        mealDiary.setRemainingCalories(mealDiary.getRemainingCalories() - meal.getCalories());
+        System.out.println(mealDiary.getRemainingCalories());
         mealRepository.save(meal);
         mealDiaryRepository.save(mealDiary);
         userRepository.save(userToAddMealTo);
@@ -49,7 +49,8 @@ public class MealService {
             mealDiary = new MealDiary();
             mealDiary.setUser(userToAddMealTo);
             mealDiary.setDate(mealDto.getMealDate());
-            mealDiary.setCaloricDemandForGivenDay(userToAddMealTo.getCaloricDemand());
+            mealDiary.setRemainingCalories(userToAddMealTo.getCaloricDemand());
+            mealDiary.setCaloricDemand(userToAddMealTo.getCaloricDemand());
             mealDiaryRepository.save(mealDiary);
             userToAddMealTo.getMealDiary().add(mealDiary);
         }

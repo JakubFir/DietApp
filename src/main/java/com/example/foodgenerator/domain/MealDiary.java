@@ -21,7 +21,8 @@ public class MealDiary {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    private double caloricDemandForGivenDay;
+    private double remainingCalories;
+    private double caloricDemand;
     private LocalDate date;
 
     @OneToMany(mappedBy = "mealDiary", cascade = CascadeType.ALL, orphanRemoval = true)
