@@ -1,5 +1,6 @@
 package com.example.foodgenerator.dto;
 
+import com.example.foodgenerator.domain.Diet;
 import com.example.foodgenerator.domain.Gender;
 import com.example.foodgenerator.domain.Role;
 import lombok.AllArgsConstructor;
@@ -23,5 +24,6 @@ public class UserDto {
     private Gender gender;
     private int activityLevel;
     private double caloricDemand;
+    private DietDto diet;
     private List<MealDiaryDto> mealDiary;
 }

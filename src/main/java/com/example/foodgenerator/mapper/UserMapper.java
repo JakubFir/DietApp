@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 public class UserMapper {
 
     private final MealDiaryMapper mealDiaryMapper;
+    private final DietMapper dietMapper;
 
     public UserDto mapToUserDto(User user){
         return UserDto.builder()
@@ -24,7 +25,10 @@ public class UserMapper {
                 .weight(user.getWeight())
                 .activityLevel(user.getActivityLevel())
                 .caloricDemand(user.getCaloricDemand())
+                .diet(dietMapper.mapToDietDto(user.getDiet()))
                 .mealDiary(user.getMealDiary().stream().map(mealDiaryMapper::mapToMealDiaryDTO).collect(Collectors.toList()))
                 .build();
     }
+
+
 }

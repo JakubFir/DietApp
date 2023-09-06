@@ -30,6 +30,8 @@ public class User implements UserDetails {
     private int activityLevel;
     private Role role;
     private double caloricDemand;
+    @ManyToOne
+    private Diet diet;
     @OneToMany
     private List<MealDiary> mealDiary;
 
