@@ -6,11 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Food {
-    @JsonProperty("nutrients")
-    private Nutrients nutrients;
+
+public record Food(@JsonProperty("nutrients") Nutrients nutrients) {
+
 }

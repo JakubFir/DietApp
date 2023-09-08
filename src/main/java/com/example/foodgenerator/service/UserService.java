@@ -30,9 +30,9 @@ public class UserService {
     public UserDto updateUser(Long id, RequestUpdateBody request) {
         if(userExists(id)){
             User userToUpdate = userRepository.findById(id).orElseThrow();
-            userToUpdate.setEmail(request.getEmail());
-            userToUpdate.setUsername(request.getUsername());
-            userToUpdate.setPassword(request.getPassword());
+            userToUpdate.setEmail(request.email());
+            userToUpdate.setUsername(request.username());
+            userToUpdate.setPassword(request.password());
 
             userRepository.save(userToUpdate);
         }
@@ -40,21 +40,21 @@ public class UserService {
     }
     public double calculateCaloricDemand(RegisterRequest calculateCaloricDemandRequest){
         double bmr = calculateBmr(calculateCaloricDemandRequest);
-        ActivityLevel activityLevel = ActivityLevel.fromLevel(calculateCaloricDemandRequest.getActivityLevel());
+        ActivityLevel activityLevel = ActivityLevel.fromLevel(calculateCaloricDemandRequest.activityLevel());
         System.out.println(bmr);
         double activityMultiplier = activityLevel.getMultiplier();
         return  Math.round(bmr * activityMultiplier);
     }
 
     private double calculateBmr(RegisterRequest request) {
-        if (request.getGender() == Gender.MALE) {
-            return  Math.round(88.362 + (13.397 * request.getWeight())
-                    + (4.799 * request.getHeight())
-                    - (5.677 * request.getAge()));
+        if (request.gender() == Gender.MALE) {
+            return  Math.round(88.362 + (13.397 * request.weight())
+                    + (4.799 * request.height())
+                    - (5.677 * request.age()));
         } else {
-            return  Math.round(447.593 + (9.247 * request.getWeight())
-                    + (3.098 * request.getHeight())
-                    - (4.330 * request.getAge()));
+            return  Math.round(447.593 + (9.247 * request.weight())
+                    + (3.098 * request.height())
+                    - (4.330 * request.age()));
         }
     }
 

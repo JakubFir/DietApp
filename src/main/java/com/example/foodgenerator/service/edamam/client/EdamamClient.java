@@ -32,17 +32,17 @@ public class EdamamClient {
             ResponseEntity<ParsedRoot> edamamNutritionsResponseEntity =
                     restTemplate.exchange(uri, HttpMethod.GET, null, ParsedRoot.class);
             ParsedRoot parsedRoot = edamamNutritionsResponseEntity.getBody();
-            if (parsedRoot != null && parsedRoot.getParsed() != null && !parsedRoot.getParsed().isEmpty()) {
-                Food food = parsedRoot.getParsed().get(0).getFood();
-                if (food != null && food.getNutrients() != null) {
-                    return food.getNutrients();
+            if (parsedRoot != null && parsedRoot.parsed() != null && !parsedRoot.parsed().isEmpty()) {
+                Food food = parsedRoot.parsed().get(0).food();
+                if (food != null && food.nutrients() != null) {
+                    return food.nutrients();
                 }
             }
         } catch (RestClientException e) {
             e.printStackTrace();
         }
 
-        return new Nutrients();
+        return new Nutrients(0,0,0,0);
     }
 }
 

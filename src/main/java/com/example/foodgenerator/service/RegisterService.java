@@ -22,15 +22,15 @@ public class RegisterService {
         if(requestValidator.validateRegisterRequest(request)){
             User user = new User();
             Diet diet = new Diet();
-                user.setEmail(request.getEmail());
-                user.setUsername(request.getUsername());
-                user.setPassword(passwordEncoder.encode(request.getPassword()));
+                user.setEmail(request.email());
+                user.setUsername(request.username());
+                user.setPassword(passwordEncoder.encode(request.password()));
                 user.setRole(Role.USER);
-                user.setAge(request.getAge());
-                user.setGender(request.getGender());
-                user.setHeight(request.getHeight());
-                user.setWeight(request.getWeight());
-                user.setActivityLevel(request.getActivityLevel());
+                user.setAge(request.age());
+                user.setGender(request.gender());
+                user.setHeight(request.height());
+                user.setWeight(request.weight());
+                user.setActivityLevel(request.activityLevel());
                 user.setDiet(diet);
                 user.setCaloricDemand(userService.calculateCaloricDemand(request));
                 dietRepository.save(diet);

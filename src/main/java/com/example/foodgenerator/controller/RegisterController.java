@@ -23,7 +23,7 @@ public class RegisterController {
     @PostMapping
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequest request) {
         registerService.registerUser(request);
-        String token = jwtService.generateToken(request.getUsername());
+        String token = jwtService.generateToken(request.username());
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, token)
                 .build();

@@ -1,8 +1,10 @@
 package com.example.foodgenerator.service;
 
+import com.example.foodgenerator.domain.Diet;
 import com.example.foodgenerator.domain.Gender;
 import com.example.foodgenerator.domain.Role;
 import com.example.foodgenerator.domain.User;
+import com.example.foodgenerator.dto.DietDto;
 import com.example.foodgenerator.dto.UserDto;
 import com.example.foodgenerator.mapper.UserMapper;
 import com.example.foodgenerator.repository.UserRepository;
@@ -32,7 +34,7 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        userService = new UserService(userRepository,userMapper);
+        userService = new UserService(userRepository, userMapper);
     }
 
     @Test
@@ -50,6 +52,7 @@ class UserServiceTest {
                 3,
                 Role.USER,
                 0.0,
+                new Diet(),
                 new ArrayList<>()
         );
         UserDto userDto = new UserDto(
@@ -62,6 +65,7 @@ class UserServiceTest {
                 Gender.MALE,
                 3,
                 0.0,
+                new DietDto("test", 2, 2, 2),
                 new ArrayList<>()
         );
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
@@ -73,7 +77,7 @@ class UserServiceTest {
         System.out.println(result);
 
         //Then
-        assertThat(result.getEmail()).isEqualTo(user.getEmail());
+        assertThat(result.email()).isEqualTo(user.getEmail());
     }
 
 

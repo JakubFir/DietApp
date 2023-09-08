@@ -7,11 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class ParsedItem {
-    @JsonProperty("food")
-    private Food food;
+
+public record ParsedItem(@JsonProperty("food")
+                         Food food) {
+
 }

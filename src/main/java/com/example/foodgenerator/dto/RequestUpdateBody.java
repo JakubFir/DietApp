@@ -5,15 +5,14 @@ import com.example.foodgenerator.domain.Gender;
 import lombok.Builder;
 import lombok.Data;
 
-@Builder
-@Data
-public class RequestUpdateBody {
-    private String username;
-    private String password;
-    private String email;
-    private int age;
-    private double weight;
-    private double height;
-    private Gender gender;
-    private int activityLevel;
+
+public record RequestUpdateBody(String username,
+                                String password,
+                                String email,
+                                int age,
+                                double weight,
+                                double height,
+                                Gender gender,
+                                int activityLevel) {
+
 }

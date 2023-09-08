@@ -23,7 +23,7 @@ public class AuthenticateController {
     public ResponseEntity<?> authenticationResponse(@RequestBody AuthenticateRequest request){
         AuthenticationResponse authenticationResponse = authenticateService.authenticate(request);
         return ResponseEntity.ok()
-                .header(HttpHeaders.AUTHORIZATION, authenticationResponse.getToken())
+                .header(HttpHeaders.AUTHORIZATION, authenticationResponse.token())
                 .body(authenticationResponse);
     }
 

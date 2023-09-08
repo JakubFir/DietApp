@@ -14,21 +14,20 @@ public class UserMapper {
     private final MealDiaryMapper mealDiaryMapper;
     private final DietMapper dietMapper;
 
-    public UserDto mapToUserDto(User user){
-        return UserDto.builder()
-                .email(user.getEmail())
-                .role(user.getRole())
-                .username(user.getUsername())
-                .age(user.getAge())
-                .gender(user.getGender())
-                .height(user.getHeight())
-                .weight(user.getWeight())
-                .activityLevel(user.getActivityLevel())
-                .caloricDemand(user.getCaloricDemand())
-                .diet(dietMapper.mapToDietDto(user.getDiet()))
-                .mealDiary(user.getMealDiary().stream().map(mealDiaryMapper::mapToMealDiaryDTO).collect(Collectors.toList()))
-                .build();
+    public UserDto mapToUserDto(User user) {
+        return new UserDto(
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole(),
+                user.getAge(),
+                user.getWeight(),
+                user.getHeight(),
+                user.getGender(),
+                user.getActivityLevel(),
+                user.getCaloricDemand(),
+                dietMapper.mapToDietDto(user.getDiet()),
+                user.getMealDiary().stream().map(mealDiaryMapper::mapToMealDiaryDTO).collect(Collectors.toList())
+        );
     }
-
 
 }

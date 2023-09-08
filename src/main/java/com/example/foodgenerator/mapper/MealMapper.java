@@ -15,12 +15,12 @@ public class MealMapper {
     private final MealIngredientMapper mealIngredientMapper;
     public Meal mapToMeal(MealDto mealDto) {
         return new Meal(
-                mealDto.getMealName(),
-                mealIngredientMapper.mapToMealIngredientList(mealDto.getIngredientsList()),
-                mealDto.getCalories(),
-                mealDto.getFat(),
-                mealDto.getProtein(),
-                mealDto.getCarbs()
+                mealDto.mealName(),
+                mealIngredientMapper.mapToMealIngredientList(mealDto.ingredientsList()),
+                mealDto.calories(),
+                mealDto.fat(),
+                mealDto.protein(),
+                mealDto.carbs()
         );
     }
 

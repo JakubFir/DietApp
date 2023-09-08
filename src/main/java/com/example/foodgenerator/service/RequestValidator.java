@@ -17,9 +17,9 @@ public class RequestValidator {
     private final UserRepository userRepository;
 
     public boolean validateRegisterRequest(RegisterRequest request) {
-        String password = request.getPassword();
-        String email = request.getEmail();
-        String username = request.getUsername();
+        String password = request.password();
+        String email = request.email();
+        String username = request.username();
         if (password == null || password.length() < 5) {
             throw new BadPasswordException("Password has to be at least 5 characters long");
         }

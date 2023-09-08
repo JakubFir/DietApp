@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,7 +32,7 @@ public class MealService {
 
     public void addMealToUserMealDiary(MealDto mealDto, Long userId) {
         User userToAddMealTo = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException(" "));
-        checkIfIngredientsAreInDB(mealDto.getIngredientsList());
+        checkIfIngredientsAreInDB(mealDto.ingredientsList());
         MealDiary mealDiary = getUserMealDiary(userToAddMealTo,mealDto);
         Meal meal = calculateMealCalories(mealDto);
         meal.setMealDiary(mealDiary);
@@ -44,11 +45,11 @@ public class MealService {
     }
 
     private MealDiary getUserMealDiary(User userToAddMealTo, MealDto mealDto) {
-        MealDiary mealDiary = mealDiaryRepository.findByUserAndDate(userToAddMealTo, mealDto.getMealDate()).orElse(null);
+        MealDiary mealDiary = mealDiaryRepository.findByUserAndDate(userToAddMealTo, mealDto.mealDate()).orElse(null);
         if (mealDiary == null) {
             mealDiary = new MealDiary();
             mealDiary.setUser(userToAddMealTo);
-            mealDiary.setDate(mealDto.getMealDate());
+            mealDiary.setDate(mealDto.mealDate());
             mealDiary.setRemainingCalories(userToAddMealTo.getCaloricDemand());
             mealDiary.setCaloricDemand(userToAddMealTo.getCaloricDemand());
             mealDiaryRepository.save(mealDiary);
@@ -59,14 +60,14 @@ public class MealService {
 
     private void checkIfIngredientsAreInDB(List<IngredientsDto> ingredientsList) {
         for (IngredientsDto ingredientDto : ingredientsList) {
-            if (!ingredientsRepository.existsByName(ingredientDto.getName())) {
-                Nutrients nutrients = edamamClient.getEdamamNutrients(ingredientDto.getName());
+            if (!ingredientsRepository.existsByName(ingredientDto.name())) {
+                Nutrients nutrients = edamamClient.getEdamamNutrients(ingredientDto.name());
                 Ingredients ingredientToSave = new Ingredients(
-                        ingredientDto.getName(),
-                        nutrients.getCalories(),
-                        nutrients.getFat(),
-                        nutrients.getProtein(),
-                        nutrients.getCarbs()
+                        ingredientDto.name(),
+                        nutrients.calories(),
+                        nutrients.fat(),
+                        nutrients.protein(),
+                        nutrients.carbs()
                 );
                 ingredientsRepository.save(ingredientToSave);
             }
@@ -80,25 +81,35 @@ public class MealService {
         double protein = 0;
         double carbs = 0;
 
-        for (IngredientsDto ingredientToCount : mealDto.getIngredientsList()) {
-            Ingredients ingredients = ingredientsRepository.findByName(ingredientToCount.getName());
-            double ingredientCalories = (ingredients.getCalories() / 100) * ingredientToCount.getWeight();
-            double ingredientFat = (ingredients.getFat() / 100) * ingredientToCount.getWeight();
-            double ingredientProtein = (ingredients.getProtein() / 100) * ingredientToCount.getWeight();
-            double ingredientCarbs = (ingredients.getCarbs() / 100) * ingredientToCount.getWeight();
+        List<IngredientsDto> updatedIngredientsList = new ArrayList<>();
+
+        for (IngredientsDto ingredientToCount : mealDto.ingredientsList()) {
+            Ingredients ingredients = ingredientsRepository.findByName(ingredientToCount.name());
+            double ingredientCalories = (ingredients.getCalories() / 100) * ingredientToCount.weight();
+            double ingredientFat = (ingredients.getFat() / 100) * ingredientToCount.weight();
+            double ingredientProtein = (ingredients.getProtein() / 100) * ingredientToCount.weight();
+            double ingredientCarbs = (ingredients.getCarbs() / 100) * ingredientToCount.weight();
 
             calories += ingredientCalories;
             fat += ingredientFat;
             protein += ingredientProtein;
             carbs += ingredientCarbs;
 
-            ingredientToCount.setCalories(ingredientCalories);
-            ingredientToCount.setFat(ingredientFat);
-            ingredientToCount.setProtein(ingredientProtein);
-            ingredientToCount.setCarbs(ingredientCarbs);
+            // Create a new IngredientsDto with updated values
+            IngredientsDto updatedIngredient = new IngredientsDto(
+                    ingredientToCount.name(),
+                    ingredientCalories,
+                    ingredientFat,
+                    ingredientProtein,
+                    ingredientCarbs,
+                    ingredientToCount.weight()
+            );
+
+            updatedIngredientsList.add(updatedIngredient);
         }
 
-        List<MealIngredient> mealIngredients = mealIngredientMapper.mapToMealIngredientList(mealDto.getIngredientsList());
+        // Create MealIngredient objects and update Meal
+        List<MealIngredient> mealIngredients = mealIngredientMapper.mapToMealIngredientList(updatedIngredientsList);
         Meal meal = mealMapper.mapToMeal(mealDto);
         meal.setIngredients(mealIngredients);
         meal.setCalories(calories);

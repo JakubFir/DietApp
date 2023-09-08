@@ -10,20 +10,17 @@ import lombok.NoArgsConstructor;
 
 
 import java.util.List;
-@Builder
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class UserDto {
-    private String username;
-    private String email;
-    private Role role;
-    private int age;
-    private double weight;
-    private double height;
-    private Gender gender;
-    private int activityLevel;
-    private double caloricDemand;
-    private DietDto diet;
-    private List<MealDiaryDto> mealDiary;
+
+public record UserDto(String username,
+                      String email,
+                      Role role,
+                      int age,
+                      double weight,
+                      double height,
+                      Gender gender,
+                      int activityLevel,
+                      double caloricDemand,
+                      DietDto diet,
+                      List<MealDiaryDto> mealDiary) {
+
 }
