@@ -22,20 +22,17 @@ public class IngredientsService {
     }
 
     public void checkIfIngredientsAreInDB(List<IngredientsDto> ingredientsList) {
-
-        for (IngredientsDto ingredientDto : ingredientsList) {
-            if (!ingredientsRepository.existsByName(ingredientDto.name())) {
-                Nutrients nutrients = edamamClient.getEdamamNutrients(ingredientDto.name()).block();
-                Ingredients ingredientToSave = new Ingredients(
-                        ingredientDto.name(),
-                        nutrients.calories(),
-                        nutrients.fat(),
-                        nutrients.protein(),
-                        nutrients.carbs()
-                );
-                ingredientsRepository.save(ingredientToSave);
-
-            }
-        }
+        ingredientsList.stream()
+                .filter(ingredientsDto -> !ingredientsRepository.existsByName(ingredientsDto.name()))
+                .forEach(ingredientsDto -> {
+                    Nutrients nutrients = edamamClient.getEdamamNutrients(ingredientsDto.name()).block();
+                    Ingredients ingredientToSave = new Ingredients(
+                            ingredientsDto.name(),
+                            nutrients.calories(),
+                            nutrients.fat(),
+                            nutrients.protein(),
+                            nutrients.carbs());
+                    ingredientsRepository.save(ingredientToSave);
+                });
     }
 }

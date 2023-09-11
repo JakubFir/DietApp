@@ -17,6 +17,7 @@ public class MealDiaryService {
     public MealDiary getUserMealDiary(Long userId, LocalDate date) {
         User userToAddMealTo = userRepository.findById(userId).orElseThrow();
         MealDiary mealDiary = mealDiaryRepository.findByUserAndDate(userToAddMealTo, date).orElse(null);
+
         if (mealDiary == null) {
             mealDiary = new MealDiary();
             mealDiary.setUser(userToAddMealTo);
