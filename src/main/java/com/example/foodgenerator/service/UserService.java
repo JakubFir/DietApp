@@ -41,7 +41,6 @@ public class UserService {
     public double calculateCaloricDemand(RegisterRequest calculateCaloricDemandRequest){
         double bmr = calculateBmr(calculateCaloricDemandRequest);
         ActivityLevel activityLevel = ActivityLevel.fromLevel(calculateCaloricDemandRequest.activityLevel());
-        System.out.println(bmr);
         double activityMultiplier = activityLevel.getMultiplier();
         return  Math.round(bmr * activityMultiplier);
     }

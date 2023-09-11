@@ -15,14 +15,18 @@ public class MealDiaryService {
     private final UserRepository userRepository;
 
     public MealDiary getUserMealDiary(Long userId, LocalDate date) {
-        User user = userRepository.findById(userId).orElseThrow();
-        MealDiary mealDiary = mealDiaryRepository.findByUserAndDate(user,date).orElse(new MealDiary());
-        if(mealDiary.getRemainingCalories() == 0){
-            mealDiary.setRemainingCalories(user.getCaloricDemand());
+        User userToAddMealTo = userRepository.findById(userId).orElseThrow();
+        MealDiary mealDiary = mealDiaryRepository.findByUserAndDate(userToAddMealTo, date).orElse(null);
+        if (mealDiary == null) {
+            mealDiary = new MealDiary();
+            mealDiary.setUser(userToAddMealTo);
+            mealDiary.setDate(date);
+            mealDiary.setRemainingCalories(userToAddMealTo.getCaloricDemand());
+            mealDiary.setCaloricDemand(userToAddMealTo.getCaloricDemand());
+            mealDiaryRepository.save(mealDiary);
+            userToAddMealTo.getMealDiary().add(mealDiary);
         }
-        mealDiary.setCaloricDemand(user.getCaloricDemand());
-        mealDiary.setUser(user);
-        mealDiary.setDate(date);
         return mealDiary;
     }
+
 }

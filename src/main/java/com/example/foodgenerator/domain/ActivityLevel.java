@@ -2,6 +2,9 @@ package com.example.foodgenerator.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.Arrays;
+
 @AllArgsConstructor
 @Getter
 public enum ActivityLevel {
