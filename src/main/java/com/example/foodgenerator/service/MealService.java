@@ -61,7 +61,7 @@ public class MealService {
     private void checkIfIngredientsAreInDB(List<IngredientsDto> ingredientsList) {
         for (IngredientsDto ingredientDto : ingredientsList) {
             if (!ingredientsRepository.existsByName(ingredientDto.name())) {
-                Nutrients nutrients = edamamClient.getEdamamNutrients(ingredientDto.name());
+                Nutrients nutrients = edamamClient.getEdamamNutrients(ingredientDto.name()).block();
                 Ingredients ingredientToSave = new Ingredients(
                         ingredientDto.name(),
                         nutrients.calories(),
