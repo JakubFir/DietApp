@@ -7,6 +7,7 @@ import com.example.foodgenerator.repository.IngredientsRepository;
 import com.example.foodgenerator.service.edamam.client.EdamamClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -22,17 +23,21 @@ public class IngredientsService {
     }
 
     public void checkIfIngredientsAreInDB(List<IngredientsDto> ingredientsList) {
-        ingredientsList.stream()
-                .filter(ingredientsDto -> !ingredientsRepository.existsByName(ingredientsDto.name()))
-                .forEach(ingredientsDto -> {
-                    Nutrients nutrients = edamamClient.getEdamamNutrients(ingredientsDto.name()).block();
-                    Ingredients ingredientToSave = new Ingredients(
+        ingredientsList.forEach(ingredientsDto -> {
+            if (!ingredientsRepository.existsByName(ingredientsDto.name())) {
+                Mono<Nutrients> nutrientsMono = edamamClient.getEdamamNutrients(ingredientsDto.name());
+
+                nutrientsMono.subscribe(nutrients -> {
+                    Ingredients ingredients = new Ingredients(
                             ingredientsDto.name(),
                             nutrients.calories(),
                             nutrients.fat(),
                             nutrients.protein(),
-                            nutrients.carbs());
-                    ingredientsRepository.save(ingredientToSave);
+                            nutrients.carbs()
+                    );
+                    ingredientsRepository.save(ingredients);
                 });
+            }
+        });
     }
 }
