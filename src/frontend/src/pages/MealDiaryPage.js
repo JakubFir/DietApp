@@ -3,12 +3,15 @@ import { Button, Typography, Card, Space, Progress, Tooltip } from 'antd';
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import { getUserMealDiary } from "../clients/MealDiaryClient";
 import AddMealDraver from "../drawers/AddMealDraver";
+import {getUserInformation} from "../clients/UserClient";
 
 const MealDiaryPage = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [meals, setMeals] = useState([]);
     const [showDrawer, setShowDrawer] = useState(false);
     const [caloricDemandProgress, setCaloricDemandProgress] = useState(0);
+    const [dietMacros, setDietMacros] = useState({});
+
 
     const close = () => {
         setShowDrawer(false);
@@ -17,7 +20,9 @@ const MealDiaryPage = () => {
     const handleAddMeal = () => {
         setShowDrawer(true);
     };
-
+    const updateMeals = (date) => {
+        fetchMeals(date); //
+    };
     const handleDateChange = (date) => {
         setSelectedDate(date);
     };
@@ -32,7 +37,22 @@ const MealDiaryPage = () => {
                 setMeals(data);
             });
     };
-
+    const getUserDietMacro = () => {
+        const jwtToken = localStorage.getItem("jwt");
+        const decodedToken = JSON.parse(atob(jwtToken.split('.')[1]));
+        getUserInformation(decodedToken.UserId)
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.diet) {
+                    const { protein, fat, carbs } = data.diet;
+                    setDietMacros({ protein, fat, carbs });
+                }
+            })
+            .catch(error => {
+                // Handle errors here
+                console.error('Error fetching user diet macro:', error);
+            });
+    }
     const calculateCaloricDemandProgress = () => {
         if (meals.list && typeof meals.caloricDemand === 'number') {
             let progress = ((meals.caloricDemand - meals.remainingCalories)/meals.caloricDemand) * 100;
@@ -43,6 +63,7 @@ const MealDiaryPage = () => {
 
     useEffect(() => {
         fetchMeals(selectedDate);
+        getUserDietMacro();
     }, [selectedDate]);
 
     useEffect(() => {
@@ -87,6 +108,7 @@ const MealDiaryPage = () => {
                     visible={showDrawer}
                     close={close}
                     selectedDate={selectedDate}
+                    updateMeals={updateMeals}
                 />
                 <div>
                     <div style={{ marginBottom: '5vh', display: 'flex', justifyContent: 'center' }}>
@@ -123,9 +145,9 @@ const MealDiaryPage = () => {
                             height: '400px',
                         }}>
                             <p>Calories: {Math.round(totalSum.calories)}</p>
-                            <p>Fat: {Math.round(totalSum.fat)}</p>
-                            <p>Protein: {Math.round(totalSum.protein)}</p>
-                            <p>Carbs: {Math.round(totalSum.carbs)}</p>
+                            <p>Fat: {Math.round(totalSum.fat)} / {dietMacros.fat}</p>
+                            <p>Protein: {Math.round(totalSum.protein)} / {dietMacros.protein}</p>
+                            <p>Carbs: {Math.round(totalSum.carbs)} / {dietMacros.carbs}</p>
                                 <Space  >
                                     <Tooltip title={`${caloricDemandProgress.toFixed(2)}% of daily caloric demand achieved`}>
                                         <Progress percent={caloricDemandProgress} success={{ percent: caloricDemandProgress }} type="dashboard" />

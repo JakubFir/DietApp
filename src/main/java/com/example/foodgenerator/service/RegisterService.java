@@ -6,6 +6,7 @@ import com.example.foodgenerator.domain.User;
 import com.example.foodgenerator.dto.RegisterRequest;
 import com.example.foodgenerator.repository.DietRepository;
 import com.example.foodgenerator.repository.UserRepository;
+import com.example.foodgenerator.service.dietStrategy.DietType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,11 @@ public class RegisterService {
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final DietRepository dietRepository;
+    private final DietService dietService;
     public void registerUser(RegisterRequest request) {
         if(requestValidator.validateRegisterRequest(request)){
-            User user = new User();
             Diet diet = new Diet();
+            User user = new User();
                 user.setEmail(request.email());
                 user.setUsername(request.username());
                 user.setPassword(passwordEncoder.encode(request.password()));
@@ -30,13 +32,19 @@ public class RegisterService {
                 user.setGender(request.gender());
                 user.setHeight(request.height());
                 user.setWeight(request.weight());
-                user.setActivityLevel(request.activityLevel());
                 user.setDiet(diet);
+                user.setActivityLevel(request.activityLevel());
                 user.setCaloricDemand(userService.calculateCaloricDemand(request));
                 dietRepository.save(diet);
                 userRepository.save(user);
-
+                setStartingDietToDefualt(user);
         }
 
     }
+
+    private void setStartingDietToDefualt(User user) {
+        dietService.setUserDiet(DietType.DEFAULT, user.getUserId());
+    }
+
+
 }

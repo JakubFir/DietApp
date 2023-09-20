@@ -2,7 +2,7 @@ import { Button, Col, Drawer, Form, Input, Row, Select, Space } from "antd";
 import { useState } from "react";
 import {addMealToUserMealDiary} from "../clients/MealDiaryClient";
 
-const AddMealDrawer = ({ visible, close, selectedDate }) => {
+const AddMealDrawer = ({ visible, close, selectedDate, updateMeals}) => {
     const [mealName, setMealName] = useState("");
     const [ingredients, setIngredients] = useState([]);
 
@@ -39,10 +39,10 @@ const AddMealDrawer = ({ visible, close, selectedDate }) => {
             mealDate: formatDateToAPIFormat(selectedDate),
             ingredientsList: ingredients,
         };
-        console.log(requestBody)
         addMealToUserMealDiary(decodedToken.UserId, requestBody)
             .then((data) => {
                 console.log("API response:", data);
+                updateMeals(selectedDate);
             })
             .catch((error) => {
                 console.error("API error:", error);

@@ -35,8 +35,10 @@ public class UserService {
             userToUpdate.setPassword(request.password());
 
             userRepository.save(userToUpdate);
+            return userMapper.mapToUserDto(userToUpdate);
+        }else{
+            throw new UsernameNotFoundException("user not found");
         }
-        return userMapper.mapToUserDto(userRepository.findById(id).orElseThrow());
     }
     public double calculateCaloricDemand(RegisterRequest calculateCaloricDemandRequest){
         double bmr = calculateBmr(calculateCaloricDemandRequest);

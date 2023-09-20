@@ -18,6 +18,6 @@ public class DietController {
 
     @GetMapping("{userId}/default")
     public void setDefaultDiet(@PathVariable Long userId){
-        dietService.setUserDietToDefault(DietType.DEFAULT, userId);
+        dietService.setUserDiet(DietType.DEFAULT, userId);
     }
 }

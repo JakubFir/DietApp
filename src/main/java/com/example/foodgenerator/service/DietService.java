@@ -2,6 +2,7 @@ package com.example.foodgenerator.service;
 
 import com.example.foodgenerator.domain.User;
 import com.example.foodgenerator.repository.UserRepository;
+import com.example.foodgenerator.service.dietStrategy.DefaultDietStrategy;
 import com.example.foodgenerator.service.dietStrategy.DietStrategy;
 import com.example.foodgenerator.service.dietStrategy.DietType;
 import lombok.RequiredArgsConstructor;
@@ -14,13 +15,14 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class DietService {
     private final UserRepository userRepository;
+    private final DefaultDietStrategy defaultDietStrategy;
     private final Map<DietType, DietStrategy> setDietByType;
 
-    public void setUserDietToDefault(DietType dietType, Long userId) {
+    public void setUserDiet(DietType dietType, Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
-        DietStrategy dietStrategy = setDietByType.getOrDefault(dietType, null);
+        DietStrategy dietStrategy = setDietByType.getOrDefault(dietType, defaultDietStrategy);
         if (Objects.isNull(dietStrategy)) {
-            throw new IllegalArgumentException("not foud");
+            throw new IllegalArgumentException("not found");
         }
         dietStrategy.calculateMacro(user);
     }
