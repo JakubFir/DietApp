@@ -12,5 +12,8 @@ jobs:
       - setup_remote_docker:
           version: 20.10.12
       - run:
+          name: Build docker image
+          run: docker build -t diet .
+      - run:
           name: Build the Java project
           command: ./mvnw clean install
