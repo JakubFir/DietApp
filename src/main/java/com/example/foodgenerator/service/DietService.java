@@ -1,6 +1,7 @@
 package com.example.foodgenerator.service;
 
 import com.example.foodgenerator.domain.User;
+import com.example.foodgenerator.exceptions.DietNotFoundException;
 import com.example.foodgenerator.repository.UserRepository;
 import com.example.foodgenerator.service.dietStrategy.DefaultDietStrategy;
 import com.example.foodgenerator.service.dietStrategy.DietStrategy;
@@ -22,7 +23,7 @@ public class DietService {
         User user = userRepository.findById(userId).orElseThrow();
         DietStrategy dietStrategy = setDietByType.getOrDefault(dietType, defaultDietStrategy);
         if (Objects.isNull(dietStrategy)) {
-            throw new IllegalArgumentException("not found");
+            throw new DietNotFoundException("not found");
         }
         dietStrategy.calculateMacro(user);
     }

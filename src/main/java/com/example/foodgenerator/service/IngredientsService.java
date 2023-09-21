@@ -34,7 +34,6 @@ public class IngredientsService {
                             nutrients.protein(),
                             nutrients.carbs()
                     );
-                System.out.println(ingredients);
                     ingredientsRepository.save(ingredients);
             }
         });

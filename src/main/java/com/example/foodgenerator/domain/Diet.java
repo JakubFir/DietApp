@@ -19,7 +19,7 @@ public class Diet {
     private double protein;
     private double fat;
     private double carbs;
-    @OneToMany(mappedBy = "diet")
+    @OneToMany(mappedBy = "diet",fetch = FetchType.EAGER)
     private List<User> users;
 
     public Diet(String name, double protein, double fat, double carbs, List<User> users) {

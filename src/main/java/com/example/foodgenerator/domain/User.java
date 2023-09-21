@@ -32,7 +32,7 @@ public class User implements UserDetails {
     private double caloricDemand;
     @ManyToOne
     private Diet diet;
-    @OneToMany
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
     private List<MealDiary> mealDiary;
 
     @Override

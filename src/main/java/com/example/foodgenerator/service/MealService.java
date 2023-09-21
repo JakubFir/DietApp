@@ -32,7 +32,7 @@ public class MealService {
     private final MealMapper mealMapper;
 
     public void addMealToUserMealDiary(MealDto mealDto, Long userId) {
-        User userToAddMealTo = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException(" "));
+        User userToAddMealTo = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User with given ID doesn't exists "));
         ingredientsService.checkIfIngredientsAreInDB(mealDto.ingredientsList());
         MealDiary mealDiary = mealDiaryService.getUserMealDiary(userId, mealDto.mealDate());
         Meal meal = calculateMealCalories(mealDto);
