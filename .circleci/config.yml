@@ -4,15 +4,13 @@ jobs:
     docker:
       - image: cimg/openjdk:20.0.1
     working_directory: ~/repo
-    executors:
-      machine_executor_amd64:
-        machine:
-          image: ubuntu-2204:2022.04.2
     steps:
       - checkout
       - run:
           name: Set execute permissions for mvnw
           command: chmod +x mvnw
+      - setup_remote_docker:
+          version: 20.10.12
       - run:
           name: Build the Java project
           command: ./mvnw clean install
