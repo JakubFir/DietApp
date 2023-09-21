@@ -1,6 +1,7 @@
 package com.example.foodgenerator.service;
 
 import com.example.foodgenerator.domain.Diet;
+import com.example.foodgenerator.domain.MealDiary;
 import com.example.foodgenerator.domain.Role;
 import com.example.foodgenerator.domain.User;
 import com.example.foodgenerator.dto.RegisterRequest;
