@@ -18,7 +18,7 @@ public class MealDiaryService {
 
     public MealDiary getUserMealDiary(Long userId, LocalDate date) {
         User userToAddMealTo = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User with given ID doesnt exists"));
-        MealDiary mealDiary = mealDiaryRepository.findByUserAndDate(userToAddMealTo, date).orElseThrow(() -> new MealDiaryNotFoundException("Meal diary for given day doesn't exists"));
+        MealDiary mealDiary = mealDiaryRepository.findByUserAndDate(userToAddMealTo, date).orElse(null);
         if (mealDiary == null) {
             mealDiary = new MealDiary();
             mealDiary.setUser(userToAddMealTo);
