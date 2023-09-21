@@ -12,6 +12,9 @@ jobs:
       - setup_remote_docker:
           version: 20.10.12
       - run:
+          name: Build the Java project without tests
+          command: ./mvnw clean install -DskipTests=true
+      - run:
           name: Build docker image
           command: docker build -t diet .
       - run:
