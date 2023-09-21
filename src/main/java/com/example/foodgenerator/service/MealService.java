@@ -47,7 +47,6 @@ public class MealService {
 
     private Meal calculateMealCalories(MealDto mealDto) {
         Meal meal = mealMapper.mapToMeal(mealDto);
-
         List<IngredientsDto>  updatedIngredientsList =  mealDto.ingredientsList().stream()
                 .map(ingredientToCount -> {
                     Ingredients ingredients = ingredientsRepository.findByName(ingredientToCount.name());

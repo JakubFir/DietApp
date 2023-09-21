@@ -26,16 +26,16 @@ public class IngredientsService {
         ingredientsList.forEach(ingredientsDto -> {
             if (!ingredientsRepository.existsByName(ingredientsDto.name())) {
                 Mono<Nutrients> nutrientsMono = edamamClient.getEdamamNutrients(ingredientsDto.name());
-                nutrientsMono.subscribe(nutrients -> {
-                    Ingredients ingredients = new Ingredients(
+                Nutrients nutrients = nutrientsMono.block();
+                Ingredients ingredients = new Ingredients(
                             ingredientsDto.name(),
                             nutrients.calories(),
                             nutrients.fat(),
                             nutrients.protein(),
                             nutrients.carbs()
                     );
+                System.out.println(ingredients);
                     ingredientsRepository.save(ingredients);
-                });
             }
         });
     }

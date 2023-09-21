@@ -16,6 +16,7 @@ public class EdamamClient {
     private final EdamamConfig edamamConfig;
 
     public Mono<Nutrients> getEdamamNutrients(String product) {
+
             return webClient.get()
                     .uri(uriBuilder -> uriBuilder
                             .path("/api/food-database/v2/parser")
