@@ -1,4 +1,4 @@
-import UserProfileDescriptions from "../Components/UserProfileDescriptions";
+import UserProfileDescriptions from "../components/UserProfileDescriptions";
 
 const ProfilePage = () =>(
     <div>

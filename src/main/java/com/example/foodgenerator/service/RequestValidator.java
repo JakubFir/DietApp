@@ -6,8 +6,6 @@ import com.example.foodgenerator.exceptions.EmailTakenException;
 import com.example.foodgenerator.exceptions.UsernameTakenException;
 import com.example.foodgenerator.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,15 +27,16 @@ public class RequestValidator {
         return true;
     }
 
+
     private boolean validateUsername(String username) {
-        if (userRepository.existsByUsername(username) || username.length() < 3) {
+        if (userRepository.existsByUsername(username)) {
             throw new UsernameTakenException("Username allready taken");
         }
         return true;
     }
 
-    private boolean validateEmail(String email) {
-        if (userRepository.existsByEmail(email) || email.length() < 3) {
+    private boolean validateEmail(String  email) {
+        if (userRepository.existsByEmail(email)) {
             throw new EmailTakenException("Email allready taken");
         }
         return true;

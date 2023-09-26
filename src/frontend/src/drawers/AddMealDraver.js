@@ -1,15 +1,15 @@
-import { Button, Col, Drawer, Form, Input, Row, Select, Space } from "antd";
-import { useState } from "react";
+import {Button, Col, Drawer, Form, Input, Row, Select, Space} from "antd";
+import {useState} from "react";
 import {addMealToUserMealDiary} from "../clients/MealDiaryClient";
+import {errorNotification} from "../notifications/Notifications";
 
-const AddMealDrawer = ({ visible, close, selectedDate, updateMeals}) => {
+const AddMealDrawer = ({visible, close, selectedDate, updateMeals}) => {
     const [mealName, setMealName] = useState("");
     const [ingredients, setIngredients] = useState([]);
 
 
-
     const handleAddIngredient = () => {
-        setIngredients([...ingredients, { name: "", weight: "" }]);
+        setIngredients([...ingredients, {name: "", weight: ""}]);
     };
 
     const handleIngredientChange = (index, fieldName, value) => {
@@ -31,7 +31,7 @@ const AddMealDrawer = ({ visible, close, selectedDate, updateMeals}) => {
         setIngredients(updatedIngredients);
     };
 
-    function handleSubmit () {
+    function handleSubmit() {
         const jwtToken = localStorage.getItem("jwt");
         const decodedToken = JSON.parse(atob(jwtToken.split('.')[1]));
         const requestBody = {
@@ -39,15 +39,23 @@ const AddMealDrawer = ({ visible, close, selectedDate, updateMeals}) => {
             mealDate: formatDateToAPIFormat(selectedDate),
             ingredientsList: ingredients,
         };
+        console.log(requestBody)
         addMealToUserMealDiary(decodedToken.UserId, requestBody)
             .then((data) => {
-                console.log("API response:", data);
                 updateMeals(selectedDate);
+                close();
             })
             .catch((error) => {
-                console.error("API error:", error);
+                error.response.json().then(errorData => {
+                    errorNotification(errorData.message);
+                }).catch(() => {
+                    error.response.text().then(plainText => {
+                        errorNotification(plainText);
+
+                    });
+                });
             });
-        close();
+
     }
 
     return (
@@ -57,7 +65,7 @@ const AddMealDrawer = ({ visible, close, selectedDate, updateMeals}) => {
                 width={720}
                 onClose={close}
                 visible={visible}
-                bodyStyle={{ paddingBottom: 80 }}
+                bodyStyle={{paddingBottom: 80}}
                 extra={
                     <Space>
                         <Button onClick={close}>Cancel</Button>
@@ -73,7 +81,7 @@ const AddMealDrawer = ({ visible, close, selectedDate, updateMeals}) => {
                             <Form.Item
                                 name="mealName"
                                 label="Meal Name"
-                                rules={[{ required: true, message: "Please enter meal name" }]}
+                                rules={[{required: true, message: "Please enter meal name"}]}
                             >
                                 <Input
                                     value={mealName}

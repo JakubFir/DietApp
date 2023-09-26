@@ -3,6 +3,7 @@ import {Button, Form, Input} from "antd";
 import {useNavigate} from "react-router-dom";
 import RegisterDrawer from "../drawers/RegisterDrawer";
 import {authenticateUser} from "../clients/AuthenticateUser";
+import {errorNotification} from "../notifications/Notifications";
 
 const LoginPage = () => {
     const [username, setUsername] = useState("");
@@ -19,6 +20,10 @@ const LoginPage = () => {
     };
 
     const sendLoginRequest = () => {
+        if(!username || !password){
+            errorNotification("Provide valid information's")
+            return;
+        }
         const loginBody = {
             username: username,
             password: password,
@@ -28,10 +33,9 @@ const LoginPage = () => {
             .then(response => response.json())
             .then(data => {
                 localStorage.setItem('jwt', data.token);
-                console.log(data.token)
                 navigate("/profile")
             }).catch(error => {
-                console.log(error)
+                errorNotification("provide valid credentials")
         })
 
     };
@@ -83,7 +87,7 @@ const LoginPage = () => {
                         rules={[{required: true, message: 'Pleas enter your password!'}]}
                     >
                         <Input value={password} placeholder="Pleas enter your password"
-                               onChange={(e) => setPassword(e.target.value)}/>
+                               onChange={(e) => setPassword(e.target.value) }/>
                     </Form.Item>
                     <Form.Item
                         wrapperCol={{

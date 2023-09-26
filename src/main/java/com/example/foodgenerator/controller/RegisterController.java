@@ -3,6 +3,7 @@ package com.example.foodgenerator.controller;
 import com.example.foodgenerator.dto.RegisterRequest;
 import com.example.foodgenerator.service.JwtService;
 import com.example.foodgenerator.service.RegisterService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class RegisterController {
 
 
     @PostMapping
-    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest request) {
         registerService.registerUser(request);
         String token = jwtService.generateToken(request.username());
         return ResponseEntity.ok()

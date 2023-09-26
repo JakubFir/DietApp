@@ -3,6 +3,8 @@ package com.example.foodgenerator.controller;
 import com.example.foodgenerator.domain.MealDiary;
 import com.example.foodgenerator.dto.MealDto;
 import com.example.foodgenerator.service.MealService;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +18,7 @@ import java.util.List;
 public class MealController {
     private final MealService mealService;
     @PostMapping(path = "/{userId}")
-    public ResponseEntity<Void> addMealToUserMealList(@RequestBody MealDto mealDto, @PathVariable Long userId) {
+    public ResponseEntity<Void> addMealToUserMealList(@RequestBody @NotNull @NotEmpty MealDto mealDto, @PathVariable Long userId) {
         mealService.addMealToUserMealDiary(mealDto, userId);
         return ResponseEntity.ok().build();
     }

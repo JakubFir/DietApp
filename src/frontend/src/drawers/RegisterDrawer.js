@@ -1,9 +1,10 @@
 import {Button, Col, Drawer, Form, Input, InputNumber, Row, Select, Space} from "antd";
 import {useState} from "react";
 import {registerUser} from "../clients/RegisterClinet";
+import {errorNotification} from "../notifications/Notifications";
 
 
-const RegisterDrawer = ({ visible, close }) => {
+const RegisterDrawer = ({visible, close}) => {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -13,7 +14,11 @@ const RegisterDrawer = ({ visible, close }) => {
     const [gender, setGender] = useState("");
     const [activityLever, setActivityLever] = useState("");
 
-    function sendRegisterRequest () {
+    function sendRegisterRequest() {
+        if (!username || !email || !password || !age || !weight || !height || !gender || !activityLever) {
+            errorNotification("All fields are required")
+            return;
+        }
         const registerBody = {
             username: username,
             email: email,
@@ -28,7 +33,9 @@ const RegisterDrawer = ({ visible, close }) => {
             .then(() => {
                 close();
             }).catch(error => {
-                console.log(error);
+            error.response.text().then(errorMessage => {
+                errorNotification(errorMessage);
+            })
         })
     }
 
@@ -55,63 +62,70 @@ const RegisterDrawer = ({ visible, close }) => {
                             <Form.Item
                                 name="username"
                                 label="Username"
-                                rules={[{ required: true, message: 'Please enter username' }]}
+                                rules={[{required: true, message: 'Please enter username'}]}
                             >
-                                <Input value={username} placeholder="Please enter username" onChange={(e) => setUsername(e.target.value)} />
+                                <Input value={username} placeholder="Please enter username"
+                                       onChange={(e) => setUsername(e.target.value)}/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
                             <Form.Item
                                 name="email"
                                 label="Email"
-                                rules={[{ required: true, message: 'Please enter email' }]}
+                                rules={[{required: true, message: 'Please enter email'}]}
                             >
-                                <Input value={email} placeholder="Please enter email" onChange={(e) => setEmail(e.target.value)} />
+                                <Input value={email} placeholder="Please enter email"
+                                       onChange={(e) => setEmail(e.target.value)}/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
                             <Form.Item
                                 name="password"
                                 label="Password"
-                                rules={[{ required: true, message: 'Please enter password' }]}
+                                rules={[{required: true, message: 'Please enter password'}]}
                             >
-                                <Input.Password value={password} placeholder="Please enter password" onChange={(e) => setPassword(e.target.value)} />
+                                <Input.Password value={password} placeholder="Please enter password"
+                                                onChange={(e) => setPassword(e.target.value)}/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
                             <Form.Item
                                 name="age"
                                 label="Age"
-                                rules={[{ required: true, message: 'Please enter age' }]}
+                                rules={[{required: true, message: 'Please enter age'}]}
                             >
-                                <Input value={age} placeholder="Please enter age" onChange={(value) => setAge(value.target.value)} />
+                                <Input value={age} placeholder="Please enter age"
+                                       onChange={(value) => setAge(value.target.value)}/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
                             <Form.Item
                                 name="weight"
                                 label="Weight"
-                                rules={[{ required: true, message: 'Please enter weight' }]}
+                                rules={[{required: true, message: 'Please enter weight'}]}
                             >
-                                <Input value={weight} placeholder="Please enter weight" onChange={(value) => setWeight(value.target.value)} />
+                                <Input value={weight} placeholder="Please enter weight"
+                                       onChange={(value) => setWeight(value.target.value)}/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
                             <Form.Item
                                 name="height"
                                 label="Height"
-                                rules={[{ required: true, message: 'Please enter height' }]}
+                                rules={[{required: true, message: 'Please enter height'}]}
                             >
-                                <Input value={height} placeholder="Please enter height" onChange={(value) => setHeight(value.target.value)} />
+                                <Input value={height} placeholder="Please enter height"
+                                       onChange={(value) => setHeight(value.target.value)}/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
                             <Form.Item
                                 name="gender"
                                 label="Gender"
-                                rules={[{ required: true, message: 'Please select gender' }]}
+                                rules={[{required: true, message: 'Please select gender'}]}
                             >
-                                <Select value={gender} placeholder="Please select gender" onChange={(value) => setGender(value)}>
+                                <Select value={gender} placeholder="Please select gender"
+                                        onChange={(value) => setGender(value)}>
                                     <Select.Option value="MALE">Male</Select.Option>
                                     <Select.Option value="FEMALE">Female</Select.Option>
                                 </Select>
@@ -121,9 +135,10 @@ const RegisterDrawer = ({ visible, close }) => {
                             <Form.Item
                                 name="activityLevel"
                                 label="Activity Level"
-                                rules={[{ required: true, message: 'Please select activity level' }]}
+                                rules={[{required: true, message: 'Please select activity level'}]}
                             >
-                                <Select value={activityLever} placeholder="Please select activity level" onChange={(value) => setActivityLever(value)}>
+                                <Select value={activityLever} placeholder="Please select activity level"
+                                        onChange={(value) => setActivityLever(value)}>
                                     <Select.Option value="1">Sedentary</Select.Option>
                                     <Select.Option value="2">Lightly active</Select.Option>
                                     <Select.Option value="3">Moderately active</Select.Option>

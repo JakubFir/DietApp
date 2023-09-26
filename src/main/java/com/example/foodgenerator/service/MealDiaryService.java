@@ -2,7 +2,6 @@ package com.example.foodgenerator.service;
 
 import com.example.foodgenerator.domain.MealDiary;
 import com.example.foodgenerator.domain.User;
-import com.example.foodgenerator.exceptions.MealDiaryNotFoundException;
 import com.example.foodgenerator.repository.MealDiaryRepository;
 import com.example.foodgenerator.repository.UserRepository;
 import lombok.AllArgsConstructor;

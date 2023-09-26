@@ -1,8 +1,10 @@
 package com.example.foodgenerator.service.edamam.client;
 
+import com.example.foodgenerator.domain.Ingredients;
 import com.example.foodgenerator.dto.edamamDto.Food;
 import com.example.foodgenerator.dto.edamamDto.Nutrients;
 import com.example.foodgenerator.dto.edamamDto.ParsedRoot;
+import com.example.foodgenerator.exceptions.IngredientNotFoundException;
 import com.example.foodgenerator.service.edamam.config.EdamamConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,7 +35,7 @@ public class EdamamClient {
                                 return Mono.just(food.nutrients());
                             }
                         }
-                        return Mono.just(new Nutrients(1, 0, 0, 0));
+                        return Mono.error(new IngredientNotFoundException("Ingridient Not found"));
                     });
     }
 
