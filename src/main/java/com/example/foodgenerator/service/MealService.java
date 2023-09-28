@@ -77,9 +77,6 @@ public class MealService {
 
         return meal;
     }
-
-
-
     public void deleteMeal(Long userId, LocalDate date, MealDto mealDto) {
         User user = userRepository.findById(userId).orElseThrow();
         MealDiary mealDiary = mealDiaryRepository.findByUserAndDate(user,date).orElseThrow();
