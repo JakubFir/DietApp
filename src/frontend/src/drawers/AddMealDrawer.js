@@ -39,7 +39,6 @@ const AddMealDrawer = ({visible, close, selectedDate, updateMeals}) => {
             mealDate: formatDateToAPIFormat(selectedDate),
             ingredientsList: ingredients,
         };
-        console.log(requestBody)
         addMealToUserMealDiary(decodedToken.UserId, requestBody)
             .then((data) => {
                 updateMeals(selectedDate);

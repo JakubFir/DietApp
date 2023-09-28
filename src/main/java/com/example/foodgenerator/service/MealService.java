@@ -2,6 +2,7 @@ package com.example.foodgenerator.service;
 
 import com.example.foodgenerator.domain.*;
 import com.example.foodgenerator.dto.IngredientsDto;
+import com.example.foodgenerator.dto.MealDiaryDto;
 import com.example.foodgenerator.dto.MealDto;
 import com.example.foodgenerator.mapper.MealIngredientMapper;
 import com.example.foodgenerator.mapper.MealMapper;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -76,7 +78,17 @@ public class MealService {
         return meal;
     }
 
-    public List<MealDiary> getUserMeals(Long userId) {
-        return userRepository.findById(userId).orElseThrow().getMealDiary();
+
+
+    public void deleteMeal(Long userId, LocalDate date, MealDto mealDto) {
+        User user = userRepository.findById(userId).orElseThrow();
+        MealDiary mealDiary = mealDiaryRepository.findByUserAndDate(user,date).orElseThrow();
+        Meal mealToRemove = mealDiary.getMeals().stream().filter(meal -> meal.getMealName().equals(mealDto.mealName()))
+                .findFirst().orElseThrow();
+        mealDiary.getMeals().remove(mealToRemove);
+        System.out.println(mealToRemove.getCalories());
+        mealDiary.setRemainingCalories(mealDiary.getRemainingCalories() + mealToRemove.getCalories());
+        mealDiaryRepository.save(mealDiary);
+
     }
 }

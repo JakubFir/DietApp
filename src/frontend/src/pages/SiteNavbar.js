@@ -20,26 +20,26 @@ export function SiteNavbar() {
     return (
         <>
             <Header
-                style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+                style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+            >
                 <div />
                 <Menu theme="dark" mode="inline">
                     <div className="button-group">
                         {isLoggedIn ? (
                             <>
-                                <Link to="/profile">
-                                    <Button Button type="primary" shape="round">
+                                <Link to="/profile" key="profile-link">
+                                    <Button type="primary" shape="round">
                                         Profile
                                     </Button>
                                 </Link>
-                                <Link to="/meals">
-                                    <Button Button type="primary" shape="round">
+                                <Link to="/meals" key="meals-link">
+                                    <Button type="primary" shape="round">
                                         Meals
                                     </Button>
                                 </Link>
                                 <Button type="primary" shape="round" onClick={handleLogout}>
                                     Logout
                                 </Button>
-
                             </>
                         ) : (
                             <Link to="/login">

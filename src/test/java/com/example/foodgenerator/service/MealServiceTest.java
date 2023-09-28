@@ -94,22 +94,6 @@ class MealServiceTest {
 
     }
 
-    @Test
-    void getUserMeals() {
-        //Given
-        MealDiary mealDiary = new MealDiary();
-        User user = new User();
-        mealDiary.setId(6L);
-        user.setMealDiary(List.of(mealDiary));
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-
-        //When
-        List<MealDiary> result = mealService.getUserMeals(1L);
-
-        //Then
-        assertThat(result).isNotNull();
-        assertThat(result.get(0).getId()).isEqualTo(mealDiary.getId());
-    }
 
     @Test
     void calculateMealcalories() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
