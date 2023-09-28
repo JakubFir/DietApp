@@ -12,11 +12,11 @@ jobs:
       - setup_remote_docker:
           version: 20.10.12
       - run:
-          name: Build the Java project without tests
-          command: ./mvnw clean install -DskipTests=true
+          name: Build the Java project without tests using a specific profile
+          command: ./mvnw clean install -DskipTests=true -P native
       - run:
           name: Build docker image
           command: docker build -t diet .
       - run:
-          name: Build the Java project
-          command: ./mvnw clean install
+          name: Build the Java project using a specific profile
+          command: ./mvnw clean install -P native
