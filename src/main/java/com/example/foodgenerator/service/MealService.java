@@ -77,15 +77,41 @@ public class MealService {
 
         return meal;
     }
+    public void updateUserMeal(MealDto mealDto, Long userId) {
+        User userToAddMealTo = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User with given ID doesn't exists "));
+        ingredientsService.checkIfIngredientsAreInDB(mealDto.ingredientsList());
+        MealDiary mealDiary = mealDiaryService.getUserMealDiary(userId, mealDto.mealDate());
+        Meal mealToUpdate = mealDiary.getMeals()
+                .stream()
+                .filter(meal -> meal.getId().equals(mealDto.mealId()))
+                .findFirst().orElseThrow();
+
+        var oldMealCalories = mealToUpdate.getCalories();
+
+        Meal updatedMeal = calculateMealCalories(mealDto);
+
+        mealToUpdate.setMealName(updatedMeal.getMealName());
+        mealToUpdate.setCalories(updatedMeal.getCalories());
+        mealToUpdate.setFat(updatedMeal.getFat());
+        mealToUpdate.setProtein(updatedMeal.getProtein());
+        mealToUpdate.setCarbs(updatedMeal.getCarbs());
+        mealToUpdate.setIngredients(updatedMeal.getIngredients());
+        mealDiary.setRemainingCalories((mealDiary.getRemainingCalories() + oldMealCalories) - updatedMeal.getCalories());
+        mealRepository.save(mealToUpdate);
+        mealDiaryRepository.save(mealDiary);
+        userRepository.save(userToAddMealTo);
+
+    }
     public void deleteMeal(Long userId, LocalDate date, MealDto mealDto) {
         User user = userRepository.findById(userId).orElseThrow();
         MealDiary mealDiary = mealDiaryRepository.findByUserAndDate(user,date).orElseThrow();
         Meal mealToRemove = mealDiary.getMeals().stream().filter(meal -> meal.getMealName().equals(mealDto.mealName()))
                 .findFirst().orElseThrow();
         mealDiary.getMeals().remove(mealToRemove);
-        System.out.println(mealToRemove.getCalories());
         mealDiary.setRemainingCalories(mealDiary.getRemainingCalories() + mealToRemove.getCalories());
         mealDiaryRepository.save(mealDiary);
 
     }
+
+
 }

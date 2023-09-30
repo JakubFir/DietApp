@@ -31,7 +31,6 @@ public class User implements UserDetails {
     @NotNull
     private String password;
     @NotNull
-    @Email
     private String email;
     @NotNull
     @Min(1)

@@ -1,7 +1,7 @@
 package com.example.foodgenerator.dto;
 
 import com.example.foodgenerator.domain.Gender;
-import lombok.Data;
+import jakarta.validation.constraints.Email;
 
 
 public record RegisterRequest(String username,

@@ -27,3 +27,12 @@ export const addMealToUserMealDiary = (userId, meal) =>
         method: 'POST',
         body: JSON.stringify(meal)
     }).then(checkStatus);
+
+export const updateUserMeal = (userId, meal) =>
+    fetch(`api/v1/meals/${userId}`, {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        method: 'put',
+        body: JSON.stringify(meal)
+    }).then(checkStatus)

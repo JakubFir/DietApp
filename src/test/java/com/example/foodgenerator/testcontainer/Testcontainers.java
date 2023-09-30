@@ -1,5 +1,6 @@
 package com.example.foodgenerator.testcontainer;
 
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.GenericContainer;
@@ -15,6 +16,7 @@ public class Testcontainers {
     protected static Network sharedNetwork = Network.newNetwork();
 
     @Container
+    @ServiceConnection
     public static MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:5.7")
             .withDatabaseName("FoodDB")
             .withUsername("root")
@@ -22,12 +24,6 @@ public class Testcontainers {
             .withExposedPorts(3306)
             .withNetwork(sharedNetwork);
 
-    @DynamicPropertySource
-    public static void mySQLContainerConfig(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", mySQLContainer::getJdbcUrl);
-        registry.add("spring.datasource.username", mySQLContainer::getUsername);
-        registry.add("spring.datasource.password", mySQLContainer::getPassword);
-    }
 
     @Container
     protected static GenericContainer<?> backendContainer =

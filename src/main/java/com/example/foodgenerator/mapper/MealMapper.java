@@ -26,6 +26,7 @@ public class MealMapper {
 
     public MealDto mapToMealDto(Meal meal) {
         return new MealDto(
+                meal.getId(),
                 meal.getMealName(),
                 meal.getCalories(),
                 meal.getFat(),

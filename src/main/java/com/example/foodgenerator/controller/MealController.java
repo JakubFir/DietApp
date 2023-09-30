@@ -24,6 +24,12 @@ public class MealController {
         mealService.addMealToUserMealDiary(mealDto, userId);
         return ResponseEntity.ok().build();
     }
+    @PutMapping(path =  "/{userId}")
+    public ResponseEntity<Void> updateUserMeal(@RequestBody MealDto mealDto, @PathVariable Long userId){
+        mealService.updateUserMeal(mealDto,userId);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping(path = "/{userId}/{date}")
     public ResponseEntity <Void> deleteMeal(@PathVariable Long userId, @PathVariable LocalDate date, @RequestBody MealDto mealDto){
         mealService.deleteMeal(userId,date,mealDto);

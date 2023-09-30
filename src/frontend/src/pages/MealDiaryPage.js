@@ -6,11 +6,14 @@ import AddMealDrawer from "../drawers/AddMealDrawer";
 import {getUserInformation} from "../clients/UserClient";
 import {deleteUserMeal} from "../clients/MealClient";
 import MealCard from "../components/MealCard";
+import UpdateMealDrawer from "../drawers/UpdateMealDrawer";
 
 const MealDiaryPage = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [meals, setMeals] = useState([]);
     const [showDrawer, setShowDrawer] = useState(false);
+    const [isEditMeal, setIsEditMeal] = useState(false);
+    const [selectedMeal, setSelectedMeal] = useState(null);
     const [caloricDemandProgress, setCaloricDemandProgress] = useState(0);
     const [dietMacros, setDietMacros] = useState({});
     const [decodedToken, setDecodedToken] = useState(null); // Initialize as null
@@ -21,6 +24,7 @@ const MealDiaryPage = () => {
     };
 
     const handleAddMeal = () => {
+        setIsEditMeal(false);
         setShowDrawer(true);
     };
     const updateMeals = (date) => {
@@ -39,12 +43,18 @@ const MealDiaryPage = () => {
             });
     };
     const handleDeleteUserMeal = (mealDto) => {
-        ;
         deleteUserMeal(decodedToken.UserId, mealDto.mealDate, mealDto)
             .then(() => updateMeals(selectedDate))
             .catch(error => {
                 console.log(error);
             });
+    };
+
+    const handleEditUserMeal= (mealDto) => {
+        setIsEditMeal(true);
+        setSelectedMeal(mealDto);
+        setShowDrawer(true);
+
     };
     const getUserDietMacro = () => {
         getUserInformation(decodedToken.UserId)
@@ -62,7 +72,9 @@ const MealDiaryPage = () => {
     }
     const calculateCaloricDemandProgress = () => {
         if (meals.list && typeof meals.caloricDemand === 'number') {
+
             let progress = ((meals.caloricDemand - meals.remainingCalories) / meals.caloricDemand) * 100;
+            console.log(progress)
             progress = Math.max(progress, 0);
             setCaloricDemandProgress(Math.round(progress));
         }
@@ -122,6 +134,8 @@ const MealDiaryPage = () => {
                     visible={showDrawer}
                     close={close}
                     selectedDate={selectedDate}
+                    isEdit={isEditMeal}
+                    mealToEdit={selectedMeal}
                     updateMeals={updateMeals}
                 />
                 <div>
@@ -135,6 +149,7 @@ const MealDiaryPage = () => {
                                 key={index}
                                 meal={meal}
                                 onDelete={handleDeleteUserMeal}
+                                onEdit={handleEditUserMeal}
                             />
                         ))}
                         <Card title="Total Sum" style={{

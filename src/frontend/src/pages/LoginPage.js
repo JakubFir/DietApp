@@ -86,8 +86,8 @@ const LoginPage = () => {
                         label="Password"
                         rules={[{required: true, message: 'Pleas enter your password!'}]}
                     >
-                        <Input value={password} placeholder="Pleas enter your password"
-                               onChange={(e) => setPassword(e.target.value) }/>
+                        <Input.Password value={password} placeholder="Please enter password"
+                                        onChange={(e) => setPassword(e.target.value)}/>
                     </Form.Item>
                     <Form.Item
                         wrapperCol={{

@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
@@ -39,6 +40,12 @@ public class GlobalHttpErrorHandler {
         String exc = "Invalid request format. Please provide valid input.";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exc);
     }
+
+    @ExceptionHandler(InvalidEmailException.class)
+    public ResponseEntity<Object> handleInvalidEmailException(InvalidEmailException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
     @ExceptionHandler(InvalidIngredientInput.class)
     public ResponseEntity<Object> handleInvalidIngredientInput(InvalidIngredientInput exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception);

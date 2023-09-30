@@ -3,6 +3,7 @@ package com.example.foodgenerator.service;
 import com.example.foodgenerator.dto.RegisterRequest;
 import com.example.foodgenerator.exceptions.BadPasswordException;
 import com.example.foodgenerator.exceptions.EmailTakenException;
+import com.example.foodgenerator.exceptions.InvalidEmailException;
 import com.example.foodgenerator.exceptions.UsernameTakenException;
 import com.example.foodgenerator.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,10 @@ public class RequestValidator {
         return true;
     }
 
-    private boolean validateEmail(String  email) {
+    private boolean validateEmail(String email) {
+        if (!email.matches("^(?!.*\\.{2})[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")) {
+            throw new InvalidEmailException("Provide a valid email");
+        }
         if (userRepository.existsByEmail(email)) {
             throw new EmailTakenException("Email allready taken");
         }

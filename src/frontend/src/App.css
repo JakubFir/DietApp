@@ -12,7 +12,40 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+.meal-card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+.section-title {
+  font-size: 20px;
+  margin-bottom: 16px;
+  color: #333; /* Adjust color as needed */
+}
 
+.custom-descriptions {
+  border: 1px solid #e8e8e8;
+  border-radius: 5px;
+  padding: 16px;
+  background-color: #f7f7f7;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+
+.custom-descriptions .ant-descriptions-label {
+  font-weight: bold;
+}
+
+.custom-descriptions .ant-descriptions-content {
+  font-size: 16px;
+  color: #555; /* Adjust color as needed */
+}
+
+.delete-button {
+  margin-top: 10px;
+}
 .App-header {
   background-color: #282c34;
   min-height: 100vh;

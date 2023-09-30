@@ -38,7 +38,7 @@ public class AddingMealT extends Testcontainers {
 
     @Test
      void canAddMeal() {
-        RegisterRequest request = new RegisterRequest("test1", "test1", "test1", 12, 40, 120, Gender.MALE, 1);
+        RegisterRequest request = new RegisterRequest("test1", "test1@wp.pl", "test1", 12, 40, 120, Gender.MALE, 1);
 
         webTestClient.post()
                 .uri("/api/v1/register")
