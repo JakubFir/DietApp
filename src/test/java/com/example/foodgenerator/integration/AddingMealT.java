@@ -1,11 +1,14 @@
 package com.example.foodgenerator.integration;
 
 import com.example.foodgenerator.domain.Gender;
+import com.example.foodgenerator.domain.Meal;
 import com.example.foodgenerator.domain.User;
 import com.example.foodgenerator.dto.IngredientsDto;
 import com.example.foodgenerator.dto.MealDto;
 import com.example.foodgenerator.dto.RegisterRequest;
+import com.example.foodgenerator.mapper.MealMapper;
 import com.example.foodgenerator.repository.IngredientsRepository;
+import com.example.foodgenerator.repository.MealRepository;
 import com.example.foodgenerator.repository.UserRepository;
 import com.example.foodgenerator.service.JwtService;
 import com.example.foodgenerator.testcontainer.Testcontainers;
@@ -16,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Flux;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,6 +38,10 @@ public class AddingMealT extends Testcontainers {
     private UserRepository userRepository;
     @Autowired
     private IngredientsRepository ingredientsRepository;
+    @Autowired
+    private MealMapper mealMapper;
+    @Autowired
+    private MealRepository mealRepository;
 
 
     @Test
@@ -51,7 +59,7 @@ public class AddingMealT extends Testcontainers {
         List<IngredientsDto> list = new ArrayList<>();
         IngredientsDto ingredients = new IngredientsDto("Banana", 10, 10, 10, 10, 100);
         list.add(ingredients);
-        MealDto mealDto = new MealDto("Dinner", 0, 0, 0, 0, LocalDate.now(),list);
+        MealDto mealDto = new MealDto(1L,"Dinner", 0, 0, 0, 0, LocalDate.now(),list);
 
         webTestClient.post()
                 .uri("/api/v1/meals/{userId}", 1L)
@@ -66,4 +74,5 @@ public class AddingMealT extends Testcontainers {
         assertThat(user).isPresent();
         assertThat(ingredientsRepository.existsByName("Banana")).isTrue();
     }
+
 }

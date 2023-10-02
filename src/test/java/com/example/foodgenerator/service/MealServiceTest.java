@@ -19,17 +19,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.in;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class MealServiceTest {
@@ -74,7 +70,7 @@ class MealServiceTest {
         MealDiary mealDiary = new MealDiary();
         List<MealIngredient> mealIngredientList = List.of(new MealIngredient("test", 2, 2, 2, 2, 2));
         Meal meal = new Meal("test", mealIngredientList, 2, 2, 2, 2);
-        MealDto mealDto = new MealDto("test", 2, 2, 2, 2, LocalDate.now(), new ArrayList<>());
+        MealDto mealDto = new MealDto(1L, "test", 2, 2, 2, 2, LocalDate.now(), new ArrayList<>());
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(mealDiaryService.getUserMealDiary(any(), any())).thenReturn(mealDiary);
@@ -93,18 +89,16 @@ class MealServiceTest {
         assertThat(argumentCaptor.getValue().getProtein()).isEqualTo(mealDto.protein());
 
     }
-
-
     @Test
-    void calculateMealcalories() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    void calculateMealCalories() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //Given
-        Method calculateCalories = MealService.class.getDeclaredMethod("calculateMealCalories",MealDto.class);
+        Method calculateCalories = MealService.class.getDeclaredMethod("calculateMealCalories", MealDto.class);
         List<MealIngredient> mealIngredientList = List.of(new MealIngredient("test", 100, 10, 10, 10, 10));
         Meal meal = new Meal("test", mealIngredientList, 0, 0, 0, 0);
-        MealDto mealDto = new MealDto("test",0,0,0,0,LocalDate.now(),new ArrayList<>());
-        IngredientsDto ingredientsDto = new IngredientsDto("test",100,10,10,10,10);
+        MealDto mealDto = new MealDto(1L, "test", 0, 0, 0, 0, LocalDate.now(), new ArrayList<>());
+        IngredientsDto ingredientsDto = new IngredientsDto("test", 100, 10, 10, 10, 10);
         mealDto.ingredientsList().add(ingredientsDto);
-        Ingredients ingredients = new Ingredients("test",100,10,10,10);
+        Ingredients ingredients = new Ingredients("test", 100, 10, 10, 10);
         calculateCalories.setAccessible(true);
 
         when(mealMapper.mapToMeal(mealDto)).thenReturn(meal);
@@ -113,8 +107,6 @@ class MealServiceTest {
 
         //When
         Meal result = (Meal) calculateCalories.invoke(mealService, mealDto);
-        List<MealIngredient> updatedIngredientsList = result.getIngredients();
-        System.out.println(updatedIngredientsList);
 
         //Then
         double expectedProtein = (ingredientsDto.protein() / 100) * ingredientsDto.weight();

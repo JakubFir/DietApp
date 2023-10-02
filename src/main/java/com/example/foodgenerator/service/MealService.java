@@ -2,7 +2,6 @@ package com.example.foodgenerator.service;
 
 import com.example.foodgenerator.domain.*;
 import com.example.foodgenerator.dto.IngredientsDto;
-import com.example.foodgenerator.dto.MealDiaryDto;
 import com.example.foodgenerator.dto.MealDto;
 import com.example.foodgenerator.mapper.MealIngredientMapper;
 import com.example.foodgenerator.mapper.MealMapper;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,14 +47,14 @@ public class MealService {
 
     private Meal calculateMealCalories(MealDto mealDto) {
         Meal meal = mealMapper.mapToMeal(mealDto);
-        List<IngredientsDto>  updatedIngredientsList =  mealDto.ingredientsList().stream()
+        List<IngredientsDto> updatedIngredientsList = mealDto.ingredientsList().stream()
                 .map(ingredientToCount -> {
+                    System.out.println(ingredientToCount);
                     Ingredients ingredients = ingredientsRepository.findByName(ingredientToCount.name());
                     double ingredientCalories = (ingredients.getCalories() / 100) * ingredientToCount.weight();
                     double ingredientFat = (ingredients.getFat() / 100) * ingredientToCount.weight();
                     double ingredientProtein = (ingredients.getProtein() / 100) * ingredientToCount.weight();
                     double ingredientCarbs = (ingredients.getCarbs() / 100) * ingredientToCount.weight();
-
                     meal.setCalories(meal.getCalories() + ingredientCalories);
                     meal.setFat(meal.getFat() + ingredientFat);
                     meal.setProtein(meal.getProtein() + ingredientProtein);
@@ -77,7 +75,9 @@ public class MealService {
 
         return meal;
     }
+
     public void updateUserMeal(MealDto mealDto, Long userId) {
+
         User userToAddMealTo = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User with given ID doesn't exists "));
         ingredientsService.checkIfIngredientsAreInDB(mealDto.ingredientsList());
         MealDiary mealDiary = mealDiaryService.getUserMealDiary(userId, mealDto.mealDate());
@@ -85,26 +85,33 @@ public class MealService {
                 .stream()
                 .filter(meal -> meal.getId().equals(mealDto.mealId()))
                 .findFirst().orElseThrow();
-
-        var oldMealCalories = mealToUpdate.getCalories();
-
         Meal updatedMeal = calculateMealCalories(mealDto);
+        System.out.println(updatedMeal);
+        var oldMealCalories = mealToUpdate.getCalories();
+        Meal mealToSave = setNewMealMacro(mealToUpdate, updatedMeal);
 
+        System.out.println(updatedMeal);
+        mealDiary.setRemainingCalories((mealDiary.getRemainingCalories() + oldMealCalories) - updatedMeal.getCalories());
+
+        mealRepository.save(mealToSave);
+        mealDiaryRepository.save(mealDiary);
+        userRepository.save(userToAddMealTo);
+
+    }
+
+    private Meal setNewMealMacro(Meal mealToUpdate, Meal updatedMeal) {
         mealToUpdate.setMealName(updatedMeal.getMealName());
         mealToUpdate.setCalories(updatedMeal.getCalories());
         mealToUpdate.setFat(updatedMeal.getFat());
         mealToUpdate.setProtein(updatedMeal.getProtein());
         mealToUpdate.setCarbs(updatedMeal.getCarbs());
         mealToUpdate.setIngredients(updatedMeal.getIngredients());
-        mealDiary.setRemainingCalories((mealDiary.getRemainingCalories() + oldMealCalories) - updatedMeal.getCalories());
-        mealRepository.save(mealToUpdate);
-        mealDiaryRepository.save(mealDiary);
-        userRepository.save(userToAddMealTo);
-
+        return mealToUpdate;
     }
+
     public void deleteMeal(Long userId, LocalDate date, MealDto mealDto) {
         User user = userRepository.findById(userId).orElseThrow();
-        MealDiary mealDiary = mealDiaryRepository.findByUserAndDate(user,date).orElseThrow();
+        MealDiary mealDiary = mealDiaryRepository.findByUserAndDate(user, date).orElseThrow();
         Meal mealToRemove = mealDiary.getMeals().stream().filter(meal -> meal.getMealName().equals(mealDto.mealName()))
                 .findFirst().orElseThrow();
         mealDiary.getMeals().remove(mealToRemove);
