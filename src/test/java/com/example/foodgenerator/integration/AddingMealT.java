@@ -38,10 +38,7 @@ public class AddingMealT extends Testcontainers {
     private UserRepository userRepository;
     @Autowired
     private IngredientsRepository ingredientsRepository;
-    @Autowired
-    private MealMapper mealMapper;
-    @Autowired
-    private MealRepository mealRepository;
+
 
 
     @Test
