@@ -2,6 +2,10 @@
 
 The Diet App is a web application designed to assist users in managing their daily caloric intake. It offers an automatic calorie calculator that calculates the caloric demand based on user-specific information. The app's primary function is to help users monitor and manage their dietary requirements.
 
+## Accessing the Diet App
+
+You can access the Diet App on AWS by following this link: [Diet App](http://food-app-env.eba-caiq6p5f.us-east-1.elasticbeanstalk.com/)
+
 ## Features
 
 1. **Calories Calculator:** The Diet App features an intelligent calories calculator that takes into account user information such as age, gender, weight, and activity level to determine daily caloric needs.
