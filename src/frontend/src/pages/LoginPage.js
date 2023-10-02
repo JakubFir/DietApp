@@ -3,7 +3,7 @@ import {Button, Form, Input} from "antd";
 import {useNavigate} from "react-router-dom";
 import RegisterDrawer from "../drawers/RegisterDrawer";
 import {authenticateUser} from "../clients/AuthenticateUser";
-import {errorNotification} from "../notifications/Notifications";
+import {errorNotification, successNotification} from "../notifications/Notifications";
 
 const LoginPage = () => {
     const [username, setUsername] = useState("");
@@ -28,12 +28,13 @@ const LoginPage = () => {
             username: username,
             password: password,
         };
-        console.log(loginBody)
         authenticateUser(loginBody)
             .then(response => response.json())
             .then(data => {
                 localStorage.setItem('jwt', data.token);
                 navigate("/profile")
+                successNotification("Welcome " + loginBody.username)
+
             }).catch(error => {
                 errorNotification("provide valid credentials")
         })

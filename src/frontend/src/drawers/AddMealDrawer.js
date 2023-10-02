@@ -1,7 +1,7 @@
 import {Button, Col, Drawer, Form, Input, Row, Select, Space} from "antd";
 import {useEffect, useState} from "react";
 import {addMealToUserMealDiary, updateUserMeal} from "../clients/MealDiaryClient";
-import {errorNotification} from "../notifications/Notifications";
+import {errorNotification, successNotification} from "../notifications/Notifications";
 
 const AddMealDrawer = ({visible, close, selectedDate, updateMeals, isEdit, mealToEdit}) => {
         const [mealName, setMealName] = useState("");
@@ -54,6 +54,7 @@ const AddMealDrawer = ({visible, close, selectedDate, updateMeals, isEdit, mealT
                     .then(() => {
                         updateMeals(selectedDate);
                         close();
+                        successNotification("Meal Updated!")
                     })
                     .catch((error) => {
                         error.response.json().then(errorData => {
@@ -61,7 +62,6 @@ const AddMealDrawer = ({visible, close, selectedDate, updateMeals, isEdit, mealT
                         }).catch(() => {
                             error.response.text().then(plainText => {
                                 errorNotification(plainText);
-
                             });
                         });
                     });
@@ -75,6 +75,7 @@ const AddMealDrawer = ({visible, close, selectedDate, updateMeals, isEdit, mealT
                     .then(() => {
                         updateMeals(selectedDate);
                         close();
+                        successNotification("Meal Added!")
                     })
                     .catch((error) => {
                         error.response.json().then(errorData => {

@@ -17,8 +17,6 @@ import java.util.List;
 public class IngredientsController {
 
     private final IngredientsService ingredientsService;
-
-
     @GetMapping()
     public ResponseEntity<List<Ingredients>> getIngredients(){
         return ResponseEntity.ok(ingredientsService.getAll());

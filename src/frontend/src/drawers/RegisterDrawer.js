@@ -1,7 +1,7 @@
 import {Button, Col, Drawer, Form, Input, InputNumber, Row, Select, Space} from "antd";
 import {useState} from "react";
 import {registerUser} from "../clients/RegisterClinet";
-import {errorNotification} from "../notifications/Notifications";
+import {errorNotification, successNotification} from "../notifications/Notifications";
 
 
 const RegisterDrawer = ({visible, close}) => {
@@ -32,6 +32,7 @@ const RegisterDrawer = ({visible, close}) => {
         registerUser(registerBody)
             .then(() => {
                 close();
+                successNotification("Succesfully registered!")
             }).catch(error => {
             error.response.text().then(errorMessage => {
                 errorNotification(errorMessage);
