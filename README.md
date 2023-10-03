@@ -4,7 +4,7 @@ The Diet App is a web application designed to assist users in managing their dai
 
 ## Accessing the Diet App
 
-You can access the Diet App on AWS by following this link: [Diet App](http://food-app-env.eba-caiq6p5f.us-east-1.elasticbeanstalk.com/)
+You can access the Diet App on AWS by following this link: [Diet App](http://foodapp-env.eba-4n8fgprv.us-east-1.elasticbeanstalk.com/)
 
 ## Features
 

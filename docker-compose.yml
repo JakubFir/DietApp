@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   backend:
-    image: "wasduio/diet:v1.2"
+    image: "wasduio/diet:v1.3"
     ports:
       - "80:8080"
     restart: "always"
