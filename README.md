@@ -1,5 +1,5 @@
 # Diet App
-
+(CURRENTLY DOWN)
 The Diet App is a web application designed to assist users in managing their daily caloric intake. It offers an automatic calorie calculator that calculates the caloric demand based on user-specific information. The app's primary function is to help users monitor and manage their dietary requirements.
 
 ## Accessing the Diet App
