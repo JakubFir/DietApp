@@ -3,6 +3,8 @@ package com.example.foodgenerator.service;
 import com.example.foodgenerator.domain.*;
 import com.example.foodgenerator.dto.IngredientsDto;
 import com.example.foodgenerator.dto.MealDto;
+import com.example.foodgenerator.exceptions.MealDiaryNotFoundException;
+import com.example.foodgenerator.exceptions.MealNotFoundException;
 import com.example.foodgenerator.mapper.MealIngredientMapper;
 import com.example.foodgenerator.mapper.MealMapper;
 import com.example.foodgenerator.repository.IngredientsRepository;
@@ -33,9 +35,15 @@ public class MealService {
 
     public void addMealToUserMealDiary(MealDto mealDto, Long userId) {
         User userToAddMealTo = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User with given ID doesn't exists "));
+
         ingredientsService.checkIfIngredientsAreInDB(mealDto.ingredientsList());
         MealDiary mealDiary = mealDiaryService.getUserMealDiary(userId, mealDto.mealDate());
         Meal meal = calculateMealCalories(mealDto);
+
+        updateMealDiaryAndUser(userToAddMealTo, mealDiary,meal);
+    }
+
+    private void updateMealDiaryAndUser(User userToAddMealTo, MealDiary mealDiary, Meal meal) {
         meal.setMealDiary(mealDiary);
         mealDiary.getMeals().add(meal);
         mealDiary.setRemainingCalories(mealDiary.getRemainingCalories() - meal.getCalories());
@@ -49,7 +57,6 @@ public class MealService {
         Meal meal = mealMapper.mapToMeal(mealDto);
         List<IngredientsDto> updatedIngredientsList = mealDto.ingredientsList().stream()
                 .map(ingredientToCount -> {
-                    System.out.println(ingredientToCount);
                     Ingredients ingredients = ingredientsRepository.findByName(ingredientToCount.name());
                     double ingredientCalories = (ingredients.getCalories() / 100) * ingredientToCount.weight();
                     double ingredientFat = (ingredients.getFat() / 100) * ingredientToCount.weight();
@@ -77,20 +84,18 @@ public class MealService {
     }
 
     public void updateUserMeal(MealDto mealDto, Long userId) {
-
         User userToAddMealTo = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User with given ID doesn't exists "));
+
         ingredientsService.checkIfIngredientsAreInDB(mealDto.ingredientsList());
+
         MealDiary mealDiary = mealDiaryService.getUserMealDiary(userId, mealDto.mealDate());
-        Meal mealToUpdate = mealDiary.getMeals()
-                .stream()
-                .filter(meal -> meal.getId().equals(mealDto.mealId()))
-                .findFirst().orElseThrow();
+        Meal mealToUpdate = findMealByIdInDiary(mealDiary,mealDto.mealId());
+
         Meal updatedMeal = calculateMealCalories(mealDto);
-        System.out.println(updatedMeal);
         var oldMealCalories = mealToUpdate.getCalories();
+
         Meal mealToSave = setNewMealMacro(mealToUpdate, updatedMeal);
 
-        System.out.println(updatedMeal);
         mealDiary.setRemainingCalories((mealDiary.getRemainingCalories() + oldMealCalories) - updatedMeal.getCalories());
 
         mealRepository.save(mealToSave);
@@ -98,6 +103,14 @@ public class MealService {
         userRepository.save(userToAddMealTo);
 
     }
+
+    private Meal findMealByIdInDiary(MealDiary mealDiary, Long mealId) {
+        return  mealDiary.getMeals()
+                .stream()
+                .filter(meal -> meal.getId().equals(mealId))
+                .findFirst().orElseThrow(() -> new MealNotFoundException("Meal with given ID doesn't exists "));
+    }
+
 
     private Meal setNewMealMacro(Meal mealToUpdate, Meal updatedMeal) {
         mealToUpdate.setMealName(updatedMeal.getMealName());
