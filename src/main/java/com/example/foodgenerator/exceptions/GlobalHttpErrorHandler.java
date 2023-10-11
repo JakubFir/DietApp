@@ -48,10 +48,14 @@ public class GlobalHttpErrorHandler {
 
     @ExceptionHandler(InvalidIngredientInput.class)
     public ResponseEntity<Object> handleInvalidIngredientInput(InvalidIngredientInput exception) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
     @ExceptionHandler(MealNotFoundException.class)
     public ResponseEntity<Object> handleMealNotFoundException(MealNotFoundException exception) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    }
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 }

@@ -1,5 +1,6 @@
 package com.example.foodgenerator.service;
 
+import com.example.foodgenerator.controller.MealDiaryController;
 import com.example.foodgenerator.domain.Diet;
 import com.example.foodgenerator.domain.MealDiary;
 import com.example.foodgenerator.domain.Role;
@@ -9,12 +10,16 @@ import com.example.foodgenerator.repository.DietRepository;
 import com.example.foodgenerator.repository.UserRepository;
 import com.example.foodgenerator.service.dietStrategy.DietType;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class RegisterService {
+    private final static Logger LOGGER = LoggerFactory.getLogger(RegisterService.class);
+
     private final UserRepository userRepository;
     private final RequestValidator requestValidator;
     private final PasswordEncoder passwordEncoder;
@@ -22,6 +27,7 @@ public class RegisterService {
     private final DietRepository dietRepository;
     private final DietService dietService;
     public void registerUser(RegisterRequest request) {
+        LOGGER.trace("Starting registering user " + request.username());
         if(requestValidator.validateRegisterRequest(request)){
             Diet diet = new Diet();
             User user = new User();
