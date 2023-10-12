@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import jakarta.validation.constraints.Email;
 
+import org.springframework.data.redis.core.RedisHash;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +22,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class User implements UserDetails {
 
     @Id

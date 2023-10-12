@@ -5,6 +5,7 @@ import com.example.foodgenerator.dto.UserDto;
 
 import com.example.foodgenerator.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +17,11 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<UserDto> getUser(@PathVariable Long id){
-        return ResponseEntity.ok(userService.getUser(id));
+    @Cacheable(value = "user", key = "#id")
+    public UserDto getUser(@PathVariable Long id) {
+        System.out.println("test");
+        UserDto user = userService.getUser(id);
+        return user;
     }
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id){

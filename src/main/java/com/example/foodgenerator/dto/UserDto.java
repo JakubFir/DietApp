@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 public record UserDto(String username,
@@ -21,6 +22,6 @@ public record UserDto(String username,
                       int activityLevel,
                       double caloricDemand,
                       DietDto diet,
-                      List<MealDiaryDto> mealDiary) {
+                      List<MealDiaryDto> mealDiary) implements Serializable {
 
 }
