@@ -7,6 +7,8 @@ import com.example.foodgenerator.service.MealDiaryService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,8 +27,9 @@ public class MealDiaryController {
     private final MealDiaryMapper mealDiaryMapper;
 
     @GetMapping(path = "/{userId}/{date}")
-    public ResponseEntity<MealDiaryDto> getUserMealDiary(@PathVariable Long userId, @PathVariable LocalDate date){
+    @Cacheable(value = "mealDiary", key = "#date")
+    public MealDiaryDto getUserMealDiary(@PathVariable Long userId, @PathVariable LocalDate date){
         LOGGER.info("Starting request to get user meal diary for user with id: " + userId);
-        return ResponseEntity.ok(mealDiaryMapper.mapToMealDiaryDTO(mealDiaryService.getUserMealDiary(userId,date)));
+        return mealDiaryMapper.mapToMealDiaryDTO(mealDiaryService.getUserMealDiary(userId,date));
     }
 }

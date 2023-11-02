@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ public class MealController {
 
     private final MealService mealService;
     @PostMapping(path = "/{userId}")
+    @CacheEvict(value = "mealDiary", key = "#mealDto.mealDate()")
     public ResponseEntity<Void> addMealToUserMealList(@RequestBody @NotNull @NotEmpty MealDto mealDto, @PathVariable Long userId) {
         LOGGER.info("Starting request for adding meal to user meal list for user with Id: " + userId + " meal: " + mealDto);
         mealService.addMealToUserMealDiary(mealDto, userId);

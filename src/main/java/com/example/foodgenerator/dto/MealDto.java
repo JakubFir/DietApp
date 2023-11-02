@@ -1,6 +1,7 @@
 package com.example.foodgenerator.dto;
 
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -12,6 +13,6 @@ public record MealDto(
         double protein,
         double carbs,
         LocalDate mealDate,
-        List<IngredientsDto> ingredientsList) {
+        List<IngredientsDto> ingredientsList)implements Serializable {
 
 }

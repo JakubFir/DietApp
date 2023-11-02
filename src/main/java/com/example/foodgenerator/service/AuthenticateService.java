@@ -1,6 +1,5 @@
 package com.example.foodgenerator.service;
 
-import com.example.foodgenerator.controller.AuthenticateController;
 import com.example.foodgenerator.dto.authenticate.AuthenticateRequest;
 import com.example.foodgenerator.dto.authenticate.AuthenticationResponse;
 import lombok.RequiredArgsConstructor;

@@ -35,6 +35,7 @@ public class MealDiaryService {
             userToAddMealTo.getMealDiary().add(mealDiary);
             LOGGER.info("Succesfully created meal diary for user with id: " + userId);
         }
+        LOGGER.info("Exiting getting user meal dairy");
         return mealDiary;
     }
 
